@@ -1,54 +1,66 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Notes on Super blog</title>
-    <link>https://vincent-p.github.io/notes/</link>
-    <description>Recent content in Notes on Super blog</description>
+    <title>My personal notes on Super blog</title>
+    <link>http://localhost:1313/notes/</link>
+    <description>Recent content in My personal notes on Super blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://vincent-p.github.io/notes/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language><atom:link href="http://localhost:1313/notes/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Advances in Real-Time Rendering- SIGGRAPH 2016</title>
-      <link>https://vincent-p.github.io/notes/20201221173231-advances_in_real_time_rendering_siggraph_2016/</link>
+      <title>[HarfBuzz] Fwd: Harfbuzz with linebreaking</title>
+      <link>http://localhost:1313/notes/20210105184027-harfbuzz_fwd_harfbuzz_with_linebreaking/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201221173231-advances_in_real_time_rendering_siggraph_2016/</guid>
+      <guid>http://localhost:1313/notes/20210105184027-harfbuzz_fwd_harfbuzz_with_linebreaking/</guid>
+      <description>link https://lists.freedesktop.org/archives/harfbuzz/2016-June/005623.html tags text rendering   each word has at least one (often many) breakpoints, but only one of them gets used per line.
+ Right.
+ And the only way to know which one to use is to shape.
+ Well, no. You shaped already; that was the first thing you did. As Adam told you, the only way to know which breakpoint to use is to run a justification algorithm, which you need to code.</description>
+    </item>
+    
+    <item>
+      <title>Advances in Real-Time Rendering- SIGGRAPH 2016</title>
+      <link>http://localhost:1313/notes/20201221173231-advances_in_real_time_rendering_siggraph_2016/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/notes/20201221173231-advances_in_real_time_rendering_siggraph_2016/</guid>
       <description>link http://advances.realtimerendering.com/s2016/index.html tags graphics programming, temporal integration  Temporal Antialiasing in Uncharted 4 Abstract: As GPUs become more powerful, many aspects of video game graphics are approaching pre-rendered CG quality. However there are still some areas that instantly give away its real time nature. Image cleanness is one of them. Anti-aliasing techniques have been used for more than a decade to create cleaner images in games, and have become fairly effective at solving certain types of aliasing such as stepping edges.</description>
     </item>
     
     <item>
       <title>Alex Tardif: An Opinionated Post on Modern Rendering Abstraction Layers</title>
-      <link>https://vincent-p.github.io/notes/20201215225804-alex_tardif_graphics_engineer/</link>
+      <link>http://localhost:1313/notes/20201215225804-alex_tardif_graphics_engineer/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201215225804-alex_tardif_graphics_engineer/</guid>
+      <guid>http://localhost:1313/notes/20201215225804-alex_tardif_graphics_engineer/</guid>
       <description>link http://www.alextardif.com/RenderingAbstractionLayers.html tags graphics programming  Alex explains what a &amp;ldquo;good&amp;rdquo; renderer abstraction should have and not have.</description>
     </item>
     
     <item>
       <title>Alex Tardif: Area Lights</title>
-      <link>https://vincent-p.github.io/notes/20201215224250-alex_tardif_graphics_engineer/</link>
+      <link>http://localhost:1313/notes/20201215224250-alex_tardif_graphics_engineer/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201215224250-alex_tardif_graphics_engineer/</guid>
+      <guid>http://localhost:1313/notes/20201215224250-alex_tardif_graphics_engineer/</guid>
       <description>link http://www.alextardif.com/arealights.html tags graphics programming, area lights, lighting  All lighting computations are done in view-space (not world-space!) This implementation is based on a deferred renderer,it renders geometry in the shape of the lights and uses a stencil pass to compute lighting only on pixels affected by lights.
 Sphere Area Lights float3 r = reflect(-viewDir, normal); float3 L = input.lightPositionView.xyz - positionView; float3 centerToRay = (dot(L, r) * r) - L; float3 closestPoint = L + centerToRay * saturate(sphereRadius / length(centerToRay)); L = normalize(closestPoint); float distLight = length(closestPoint); .</description>
     </item>
     
     <item>
       <title>area lights</title>
-      <link>https://vincent-p.github.io/notes/20201215224331-area_lights/</link>
+      <link>http://localhost:1313/notes/20201215224331-area_lights/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201215224331-area_lights/</guid>
+      <guid>http://localhost:1313/notes/20201215224331-area_lights/</guid>
       <description>Links to this note  Alex Tardif: Area Lights  </description>
     </item>
     
     <item>
       <title>C&#43;&#43;: std::optional</title>
-      <link>https://vincent-p.github.io/notes/20201219115141-c_std_optional/</link>
+      <link>http://localhost:1313/notes/20201219115141-c_std_optional/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201219115141-c_std_optional/</guid>
+      <guid>http://localhost:1313/notes/20201219115141-c_std_optional/</guid>
       <description>tags cpp  Basically a ripoff of Rust&amp;rsquo;s std::option.
 One thing to keep in mind when using std::optional is that it doesn&amp;rsquo;t have the same semantics as pointers, this code is perfectly fine:
 auto garbage = std::nullopt; auto even_more_garbage = *garbage; It doesn&amp;rsquo;t throw any exception and will silently fails. The equivalent to Rust&amp;rsquo;s unwrap() is value().
@@ -57,83 +69,92 @@ auto garbage = std::nullopt; auto not_garbage = garbage.value(); // &amp;lt;-- W
     
     <item>
       <title>cpp</title>
-      <link>https://vincent-p.github.io/notes/20201218231726-cpp/</link>
+      <link>http://localhost:1313/notes/20201218231726-cpp/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201218231726-cpp/</guid>
+      <guid>http://localhost:1313/notes/20201218231726-cpp/</guid>
       <description>Links to this note  Modern C for C++ Peeps C++: std::optional  </description>
     </item>
     
     <item>
       <title>GDC Vault - Temporal Reprojection Anti-Aliasing in INSIDE</title>
-      <link>https://vincent-p.github.io/notes/20201221172958-gdc_vault_temporal_reprojection_anti_aliasing_in_inside/</link>
+      <link>http://localhost:1313/notes/20201221172958-gdc_vault_temporal_reprojection_anti_aliasing_in_inside/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201221172958-gdc_vault_temporal_reprojection_anti_aliasing_in_inside/</guid>
+      <guid>http://localhost:1313/notes/20201221172958-gdc_vault_temporal_reprojection_anti_aliasing_in_inside/</guid>
       <description>link https://www.gdcvault.com/play/1022970/Temporal-Reprojection-Anti-Aliasing-in tags graphics programming,temporal integration  Playdead&amp;rsquo;s INSIDE makes strong use of Temporal Reprojection Anti-Aliasing to deliver satisfactorily clean and stable images.
 Temporal Reprojection Anti-Aliasing is a spatio-temporal post-process technique, where fragments from the most recent frame are correlated with fragments from a history buffer through reprojection. By carefully jittering the view frustum, and by making sensible choices for when to accept or reject a history sample, this technique can produce images that are superior to the input in terms of information density, because the information in every fragment accumulates over time.</description>
     </item>
     
     <item>
       <title>gpu driven architecture</title>
-      <link>https://vincent-p.github.io/notes/20201225231240-gpu_driven_architecture/</link>
+      <link>http://localhost:1313/notes/20201225231240-gpu_driven_architecture/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201225231240-gpu_driven_architecture/</guid>
+      <guid>http://localhost:1313/notes/20201225231240-gpu_driven_architecture/</guid>
       <description>Links to this note  GPU driven rendering experiments  </description>
     </item>
     
     <item>
       <title>GPU driven rendering experiments</title>
-      <link>https://vincent-p.github.io/notes/20201225231154-gpu_driven_rendering_experiments_final_pptx_microsoft_powerpoint_online/</link>
+      <link>http://localhost:1313/notes/20201225231154-gpu_driven_rendering_experiments_final_pptx_microsoft_powerpoint_online/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201225231154-gpu_driven_rendering_experiments_final_pptx_microsoft_powerpoint_online/</guid>
+      <guid>http://localhost:1313/notes/20201225231154-gpu_driven_rendering_experiments_final_pptx_microsoft_powerpoint_online/</guid>
       <description>link https://onedrive.live.com/view.aspx?resid=48825310AF038F63!142275&amp;amp;ithint=file,pptx&amp;amp;app=PowerPoint&amp;amp;authkey=!AD1BPt6859dRnoU tags graphics programming, gpu driven architecture  Stream compaction algorithm.</description>
     </item>
     
     <item>
       <title>graphics programming</title>
-      <link>https://vincent-p.github.io/notes/20201215183931-graphics_programming/</link>
+      <link>http://localhost:1313/notes/20201215183931-graphics_programming/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201215183931-graphics_programming/</guid>
-      <description>Links to this note  GPU driven rendering experiments Alex Tardif: Area Lights Alex Tardif: An Opinionated Post on Modern Rendering Abstraction Layers GDC Vault - Temporal Reprojection Anti-Aliasing in INSIDE Advances in Real-Time Rendering- SIGGRAPH 2016 Sample Distribution Shadow Maps The projection matrix in vulkan  </description>
+      <guid>http://localhost:1313/notes/20201215183931-graphics_programming/</guid>
+      <description>Links to this note  Alex Tardif: Area Lights Alex Tardif: An Opinionated Post on Modern Rendering Abstraction Layers The projection matrix in vulkan GDC Vault - Temporal Reprojection Anti-Aliasing in INSIDE Advances in Real-Time Rendering- SIGGRAPH 2016 GPU driven rendering experiments Higher Quality 2D Text Rendering (JCGT) Sample Distribution Shadow Maps  </description>
+    </item>
+    
+    <item>
+      <title>Higher Quality 2D Text Rendering (JCGT)</title>
+      <link>http://localhost:1313/notes/20210105204502-higher_quality_2d_text_rendering_jcgt/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/notes/20210105204502-higher_quality_2d_text_rendering_jcgt/</guid>
+      <description> link http://jcgt.org/published/0002/01/04/ tags graphics programming, text rendering  </description>
     </item>
     
     <item>
       <title>lighting</title>
-      <link>https://vincent-p.github.io/notes/20201215224339-lighting/</link>
+      <link>http://localhost:1313/notes/20201215224339-lighting/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201215224339-lighting/</guid>
+      <guid>http://localhost:1313/notes/20201215224339-lighting/</guid>
       <description>Links to this note  Alex Tardif: Area Lights  </description>
     </item>
     
     <item>
       <title>linear algebra</title>
-      <link>https://vincent-p.github.io/notes/20201216235026-linear_algebra/</link>
+      <link>http://localhost:1313/notes/20201216235026-linear_algebra/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201216235026-linear_algebra/</guid>
+      <guid>http://localhost:1313/notes/20201216235026-linear_algebra/</guid>
       <description>Links to this note  The projection matrix in vulkan  </description>
     </item>
     
     <item>
       <title>maths</title>
-      <link>https://vincent-p.github.io/notes/20201216235016-maths/</link>
+      <link>http://localhost:1313/notes/20201216235016-maths/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201216235016-maths/</guid>
+      <guid>http://localhost:1313/notes/20201216235016-maths/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Modern C for C&#43;&#43; Peeps</title>
-      <link>https://vincent-p.github.io/notes/20201218231643-modern_c_for_c_peeps/</link>
+      <link>http://localhost:1313/notes/20201218231643-modern_c_for_c_peeps/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201218231643-modern_c_for_c_peeps/</guid>
+      <guid>http://localhost:1313/notes/20201218231643-modern_c_for_c_peeps/</guid>
       <description>link https://floooh.github.io/2019/09/27/modern-c-for-cpp-peeps.html tags cpp  What you see in a lot of C code:
 typedef struct { int a, b, c; } bla_t; bla_t bla = ...; But when you want to forwards declare such struct:
 // forward-declaring bla_t and a function using bla_t: struct bla_t; void func(struct bla_t bla); // actual struct and function, using the typedef: typedef struct { int a, b, c; } bla_t; void func(bla_t bla) { // &amp;lt;= warning &amp;#39;parameter different from declaration&amp;#39;  .</description>
@@ -141,10 +162,10 @@ typedef struct { int a, b, c; } bla_t; bla_t bla = ...; But when you want to for
     
     <item>
       <title>Sample Distribution Shadow Maps</title>
-      <link>https://vincent-p.github.io/notes/sample_distribution_shadow_maps/</link>
+      <link>http://localhost:1313/notes/sample_distribution_shadow_maps/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/sample_distribution_shadow_maps/</guid>
+      <guid>http://localhost:1313/notes/sample_distribution_shadow_maps/</guid>
       <description>link http://advances.realtimerendering.com/s2010/Lauritzen-SDSM(SIGGRAPH%202010%20Advanced%20RealTime%20Rendering%20Course).pdf tags graphics programming, shadow mapping  Algorithm Basically PSSM but instead of partitioning the entire frustum, tight bounds are used.
 Two partitioning variants:
  K-means clustering: place partitions where there are a lot of samples, good results for average error Adaptive logarithmic: avoids gaps in Z  But these two approaches require a depth histogram and are very situational. A simpler min/max reduction with a basic logarithmic scheme is recommended.</description>
@@ -152,37 +173,46 @@ Two partitioning variants:
     
     <item>
       <title>shadow mapping</title>
-      <link>https://vincent-p.github.io/notes/20201215183947-shadow_mapping/</link>
+      <link>http://localhost:1313/notes/20201215183947-shadow_mapping/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201215183947-shadow_mapping/</guid>
+      <guid>http://localhost:1313/notes/20201215183947-shadow_mapping/</guid>
       <description>Links to this note  Sample Distribution Shadow Maps  </description>
     </item>
     
     <item>
       <title>temporal integration</title>
-      <link>https://vincent-p.github.io/notes/20201221173148-temporal_integration/</link>
+      <link>http://localhost:1313/notes/20201221173148-temporal_integration/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201221173148-temporal_integration/</guid>
+      <guid>http://localhost:1313/notes/20201221173148-temporal_integration/</guid>
       <description>Links to this note  GDC Vault - Temporal Reprojection Anti-Aliasing in INSIDE Advances in Real-Time Rendering- SIGGRAPH 2016  </description>
     </item>
     
     <item>
-      <title>The projection matrix in vulkan</title>
-      <link>https://vincent-p.github.io/notes/20201216234910-the_projection_matrix_in_vulkan/</link>
+      <title>text rendering</title>
+      <link>http://localhost:1313/notes/20210105204547-text_rendering/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201216234910-the_projection_matrix_in_vulkan/</guid>
+      <guid>http://localhost:1313/notes/20210105204547-text_rendering/</guid>
+      <description>Links to this note  [HarfBuzz] Fwd: Harfbuzz with linebreaking Higher Quality 2D Text Rendering (JCGT)  </description>
+    </item>
+    
+    <item>
+      <title>The projection matrix in vulkan</title>
+      <link>http://localhost:1313/notes/20201216234910-the_projection_matrix_in_vulkan/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/notes/20201216234910-the_projection_matrix_in_vulkan/</guid>
       <description>tags graphics programming, vulkan, linear algebra  The perspective projection matrix is crucial in computer graphics to display 3d points on a screen. In most of the computer graphics/opengl/vulkan tutorials online there is only a brief mention of the glm::perspective function and its parameters, and quick &amp;ldquo;hacks&amp;rdquo; to make it work on Vulkan (Hello negative viewport and correction matrix). In these notes I will try to explain the maths behind the perspective projection and give a matrix that works with Vulkan.</description>
     </item>
     
     <item>
       <title>vulkan</title>
-      <link>https://vincent-p.github.io/notes/20201216234943-vulkan/</link>
+      <link>http://localhost:1313/notes/20201216234943-vulkan/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://vincent-p.github.io/notes/20201216234943-vulkan/</guid>
+      <guid>http://localhost:1313/notes/20201216234943-vulkan/</guid>
       <description>Links to this note  The projection matrix in vulkan  </description>
     </item>
     

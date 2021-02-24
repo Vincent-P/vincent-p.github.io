@@ -1,62 +1,29 @@
 <!DOCTYPE html>
-<html lang="en-us">
-<title>GDC Vault - Temporal Reprojection Anti-Aliasing in INSIDE | Super blog</title>
-<meta charset="utf-8">
-<meta name="generator" content="Hugo 0.80.0" />
-<meta name="description" content="my blog">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://vincent-p.github.io/css/minimal.css">
-<link rel="stylesheet" href="https://vincent-p.github.io/css/syntax.css">
-<link rel="stylesheet" href="https://vincent-p.github.io/css/custom.css">
-<link rel="canonical" href="https://vincent-p.github.io/notes/20201221172958-gdc_vault_temporal_reprojection_anti_aliasing_in_inside/">
-<link rel="alternate" type="application/rss+xml" href="" title="Super blog">
-<script>
-  MathJax = {
-      tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']],
-          processEnvironments: true
-      }
-  };
-</script>
-<script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
-</script>
-
-
-<header>
-  
-    <a href="https://vincent-p.github.io/">Super blog</a>
-  
-  
-    <nav>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="/css/syntax.css">
     
-      <a href="/notes/">Notes</a>
     
-    </nav>
-  
+    <title>Super blog | GDC Vault - Temporal Reprojection Anti-Aliasing in INSIDE</title>
+</head>
+<body><header>
+  <nav>
+    <ul>
+    <li><a href="http://localhost:1313">Home</a></li>
+    
+        
+        <li><a href="/notes/">Notes</a></li>
+        
+    
+    <ul>
+  </nav>
 </header>
-
-
-<script>
-  MathJax = {
-      tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']],
-          processEnvironments: true
-      }
-  };
-</script>
-<script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
-</script>
-
-
-
-<article>
-  <header>
-    <h1>GDC Vault - Temporal Reprojection Anti-Aliasing in INSIDE</h1>
-    
-  </header>
-  <dl>
+<main>
+<h1>GDC Vault - Temporal Reprojection Anti-Aliasing in INSIDE</h1>
+<dl>
 <dt>link</dt>
 <dd><a href="https://www.gdcvault.com/play/1022970/Temporal-Reprojection-Anti-Aliasing-in">https://www.gdcvault.com/play/1022970/Temporal-Reprojection-Anti-Aliasing-in</a></dd>
 <dt>tags</dt>
@@ -66,8 +33,17 @@
 <p>Temporal Reprojection Anti-Aliasing is a spatio-temporal post-process technique, where fragments from the most recent frame are correlated with fragments from a history buffer through reprojection. By carefully jittering the view frustum, and by making sensible choices for when to accept or reject a history sample, this technique can produce images that are superior to the input in terms of information density, because the information in every fragment accumulates over time.</p>
 <p>This talk will focus on Temporal Reprojection Anti-Aliasing in the context of INSIDE. It will touch on the process, the initial research, and the pleasant side-effects. Most importantly, it will discuss in-depth the individual stages of the implementation written for INSIDE, and how it deals with common problems such as disocclusion and trailing artefacts.</p>
 
-</article>
 
+        </main><script>
+  MathJax = {
+      tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          processEnvironments: true
+      }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
 
-
+</body>
 </html>

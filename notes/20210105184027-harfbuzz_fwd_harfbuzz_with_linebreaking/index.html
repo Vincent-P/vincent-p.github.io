@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="/css/syntax.css">
+    
+    
+    <title>Super blog | [HarfBuzz] Fwd: Harfbuzz with linebreaking</title>
+</head>
+<body><header>
+  <nav>
+    <ul>
+    <li><a href="http://localhost:1313">Home</a></li>
+    
+        
+        <li><a href="/notes/">Notes</a></li>
+        
+    
+    <ul>
+  </nav>
+</header>
+<main>
+<h1>[HarfBuzz] Fwd: Harfbuzz with linebreaking</h1>
+<dl>
+<dt>link</dt>
+<dd><a href="https://lists.freedesktop.org/archives/harfbuzz/2016-June/005623.html">https://lists.freedesktop.org/archives/harfbuzz/2016-June/005623.html</a></dd>
+<dt>tags</dt>
+<dd><a href="/notes/20210105204547-text_rendering/">text rendering</a></dd>
+</dl>
+<blockquote>
+<p>each word has at least
+one (often many) breakpoints, but only one of them gets used per
+line.</p>
+</blockquote>
+<p>Right.</p>
+<blockquote>
+<p>And the only way to know which one to use is to shape.</p>
+</blockquote>
+<p>Well, no. You shaped already; that was the first thing you did. As Adam
+told you, the only way to know which breakpoint to <strong>use</strong> is to run a
+justification algorithm, which you need to code. You&rsquo;re currently
+thinking about a simple first-fit algorithm, which chops the glyphs into
+lines once they get to be longer than the target line length; that&rsquo;s
+fine, although you may find that a best-fit algorithm which performs
+dynamic programming over all possible breakpoints gives you a neater
+paragraph.</p>
+<p>Now, shaping determines the glyph widths for you (which is the input to
+your line breaking algorithm), but it is your code which is responsible
+for finding the <strong>possible</strong> breakpoints in the text, at the language
+level, and your code which is responsible for determining the <strong>actual</strong>
+breakpoints at the shaped-glyph level.</p>
+<p>Here we go then. If you want to use Harfbuzz to shape lines into
+paragraphs, here is what you need to do:</p>
+<h2 id="perform-the-first-stage-of-the-bidi-algorithm-to-organise-the-text">Perform the first stage of the bidi algorithm to organise the text</h2>
+<p>into same-direction runs. (Really, don&rsquo;t leave this bit out, and don&rsquo;t
+think &ldquo;I&rsquo;ll add RTL/complex script support later&rdquo;, because that never
+works out well and because we already have enough typesetters that only
+handle Latin.) ICU does this.</p>
+<h2 id="shape-the-paragraph-keeping-note-of-the-connection-between-the-glyphs">Shape the paragraph, keeping note of the connection between the glyphs</h2>
+<p>and the text. Harfbuzz does this.</p>
+<h2 id="find-the-breakpoints-in-the-text-using-language-analysis-on-the">Find the breakpoints in the text, using language analysis on the</h2>
+<p>characters. ICU does this.</p>
+<h2 id="create-a-data-structure-representing-the-runs-of-harfbuzz-output">Create a data structure representing the runs of Harfbuzz output</h2>
+<p>between the breakpoints - TeX and SILE call these runs &ldquo;nnodes&rdquo; - and
+the potential breakpoints themselves - &ldquo;penalty nodes&rdquo; (for breaking
+inside a &ldquo;word&rdquo;) and &ldquo;glue nodes&rdquo; (for whitespace between &ldquo;words&rdquo;).
+Assign widths to the nnodes by summing the widths of the shaped glyphs
+inside them. You can put each glyph into its own nnode instead of
+consolidating each run into an nnode if it&rsquo;s conceptually easier, but it
+just slows your justification algorithm down.</p>
+<p>Here&rsquo;s what my data structure looks like at this stage:</p>
+<p>N&lt;19.71pt&gt;(Take)G&lt;2.6pt&gt;N&lt;22.06pt&gt;(these)G&lt;2.6pt&gt;N&lt;15.37pt&gt;(five)G&lt;2.6pt&gt;N&lt;40.42pt&gt;(sentences)G&lt;2.6pt&gt;N&lt;25.17pt&gt;(which)G&lt;2.6pt&gt;N&lt;2.97pt&gt;(I)G&lt;2.6pt&gt;N&lt;19.95pt&gt;(need)G&lt;2.6pt&gt;N&lt;8.47pt&gt;(to)G&lt;2.6pt&gt;N&lt;23.24pt&gt;(break)G&lt;2.6pt&gt;N&lt;16.69pt&gt;(into)G&lt;2.6pt&gt;N&lt;4.58pt&gt;(a)G&lt;2.6pt&gt;N&lt;42.68pt&gt;(paragraph)N&lt;2.29pt&gt;(.)</p>
+<p>(Each nnode also contains a list of glyph IDs and widths.) Each of the
+glue nodes are potential break points; these were obtained by checking
+the Unicode line break status of each character. The space character
+0x20 is breakable, so it gets turned into a glue node.</p>
+<h2 id="run-your-justification-algorithm-to-determine-which-breakpoints-should">Run your justification algorithm to determine which breakpoints should</h2>
+<p>be used. Your code does this.</p>
+<h2 id="if-the-algorithm-does-not-produce-a-tight-enough-paragraph-break-open">If the algorithm does not produce a tight enough paragraph, break open</h2>
+<p>the nnodes by hyphenating the text, reshaping them into new nnodes, and
+putting a discretionary breakpoint in the middle.</p>
+<p>Now it looks like this:</p>
+<p>N&lt;19.71pt&gt;(Take)G&lt;2.64pt&gt;N&lt;22.06pt&gt;(these)G&lt;2.64pt&gt;N&lt;15.37pt&gt;(five)G&lt;2.64pt&gt;N&lt;13.99pt&gt;(sen)D(N&lt;3.36pt&gt;(-)||)N&lt;26.43pt&gt;(tences)G&lt;2.64pt&gt;N&lt;25.17pt&gt;(which)G&lt;2.64pt&gt;N&lt;2.97pt&gt;(I)G&lt;2.64pt&gt;N&lt;19.95pt&gt;(need)G&lt;2.64pt&gt;N&lt;8.47pt&gt;(to)G&lt;2.64pt&gt;N&lt;23.24pt&gt;(break)G&lt;2.64pt&gt;N&lt;16.69pt&gt;(into)G&lt;2.64pt&gt;N&lt;4.58pt&gt;(a)G&lt;2.64pt&gt;N&lt;18.43pt&gt;(para)D(N&lt;3.36pt&gt;(-)||)N&lt;24.24pt&gt;(graph)N&lt;2.29pt&gt;(.)</p>
+<h2 id="run-your-justification-algorithm-again-on-this-new-node-list-dot">Run your justification algorithm again on this new node list.</h2>
+<p>On a 100pt column, my algorithm determined that the line breaks are at
+position 10 and position 22 of the node list array.</p>
+<h2 id="organise-your-node-list-into-a-list-of-lines-based-on-the-breakpoints">Organise your node list into a list of lines, based on the breakpoints</h2>
+<p>that were fired.</p>
+<p>I split my node list at positions 10 and 22, so my lines are:</p>
+<p>N&lt;19.71pt&gt;(Take)G&lt;2.64pt&gt;N&lt;22.06pt&gt;(these)G&lt;2.64pt&gt;N&lt;15.37pt&gt;(five)G&lt;2.64pt&gt;N&lt;13.99pt&gt;(sen)D(N&lt;3.36pt&gt;(-)||)N&lt;26.43pt&gt;(tences)G&lt;2.6pt&gt;</p>
+<p>N&lt;25.17pt&gt;(which)G&lt;2.6pt&gt;N&lt;2.97pt&gt;(I)G&lt;2.6pt&gt;N&lt;19.95pt&gt;(need)G&lt;2.6pt&gt;N&lt;8.47pt&gt;(to)G&lt;2.6pt&gt;N&lt;23.24pt&gt;(break)G&lt;2.6pt&gt;N&lt;16.69pt&gt;(into)</p>
+<p>N&lt;4.58pt&gt;(a)G&lt;2.6pt&gt;N&lt;18.43pt&gt;(para)D(N&lt;3.36pt&gt;(-)||)N&lt;24.24pt&gt;(graph)N&lt;2.29pt&gt;(.)</p>
+<h2 id="for-each-line-in-the-paragraph-apply-the-second-part-of-the-bidi">For each line in the paragraph, apply the second part of the bidi</h2>
+<p>algorithm (ICU does this) and reshape where necessary. This splits and
+recombines ligatures correctly. (I promise; we have a test case to prove
+this.)</p>
+<p>You only need to determine line breaks once, and you only need to
+reshape once per line maximum. I&rsquo;m not going to argue about whether it
+works or not, because you can check out the code and the test suite for
+yourself: <a href="https://github.com/simoncozens/sile">https://github.com/simoncozens/sile</a></p>
+<blockquote>
+<p>In fact I don’t see any other way to do it</p>
+</blockquote>
+<p>You need to put aside the idea that there is a connection between
+shaping and determining which breakpoints to use. There isn&rsquo;t one, and
+this is the mental block which is stopping you from seeing solutions to
+your problem.</p>
+
+
+        </main><script>
+  MathJax = {
+      tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          processEnvironments: true
+      }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+</body>
+</html>

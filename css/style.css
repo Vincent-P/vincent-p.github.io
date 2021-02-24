@@ -1,0 +1,69 @@
+body {
+    max-width: 60em;
+    padding:0 .62em;
+    font-size: 20px;
+
+    font-family: Cambria, Georgia, serif;
+    line-height: 1.5em;
+    margin: 1.5em auto;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        color: #ffffff;
+        background-color: #000000;
+    }
+}
+
+@media print {
+    body {
+        max-width: none;
+    }
+}
+
+/* Typography */
+nav {
+    font-size: 1.5em;
+}
+
+h1,h2,h3 {
+    font-family: Calibri, Tahoma, Geneva, Helvetica Neue, Helvetica, Arial, sans-serif;
+    margin: 3rem 0 1.5rem 0;
+}
+
+code, pre {
+    font-family: Jetbrains Mono, Fira Code, Consolas, Hack, monospace;
+    font-size: 0.75em;
+}
+
+/* Code blocks */
+pre.chroma {
+    padding: 1rem;
+    overflow: scroll;
+}
+
+/* List */
+header ul {
+    list-style: none;
+    padding-left: 0px;
+}
+
+ul {
+    list-style-type: "- ";
+}
+
+/* https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type#accessibility_concerns */
+header ul li::before {
+    content: "\200B";
+}
+
+/* Links */
+a {
+    color: #0069a8;
+    transition: color .2s;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
