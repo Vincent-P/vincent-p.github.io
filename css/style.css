@@ -1,11 +1,13 @@
+html {
+    font-size: 20px;
+}
 body {
     max-width: 60em;
     padding:0 .62em;
-    font-size: 20px;
 
     font-family: Cambria, Georgia, serif;
-    line-height: 1.5em;
-    margin: 1.5em auto;
+    line-height: 1.4em;
+    margin: 1.5rem auto;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -29,6 +31,7 @@ nav {
 h1,h2,h3 {
     font-family: Calibri, Tahoma, Geneva, Helvetica Neue, Helvetica, Arial, sans-serif;
     margin: 3rem 0 1.5rem 0;
+    line-height: 2.1rem;
 }
 
 code, pre {
