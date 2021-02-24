@@ -1,10 +1,12 @@
 html {
-    font-size: 20px;
+    overflow-x: hidden; /* blank space on mobile */
+    font-size: 16px;
 }
+
 body {
     max-width: 60em;
     padding:0 .62em;
-
+    overflow-x: hidden; /* blank space on mobile */
     font-family: Cambria, Georgia, serif;
     line-height: 1.4em;
     margin: 1.5rem auto;
@@ -20,6 +22,12 @@ body {
 @media print {
     body {
         max-width: none;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    html {
+        font-size: 20px;
     }
 }
 
@@ -42,7 +50,7 @@ code, pre {
 /* Code blocks */
 pre.chroma {
     padding: 1rem;
-    overflow: scroll;
+    overflow: auto;
 }
 
 /* List */
