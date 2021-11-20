@@ -5,6 +5,7 @@ languageCode = "en-us"
 theme = "my-theme"
 
 enableRobotsTXT = true
+publishDir = "docs"
 
 # ox-hugo
 [markup.goldmark.renderer]
