@@ -1,16 +1,36 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on </title>
-    <link>/tags/</link>
-    <description>Recent content in Tags on </description>
-    <generator>Hugo -- gohugo.io</generator><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <title>Tags on webv2</title>
+    <link>https://vincent-p.github.io/tags/</link>
+    <description>Recent content in Tags on webv2</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 02 Jan 2021 00:00:00 +0100</lastBuildDate><atom:link href="https://vincent-p.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>supertag</title>
-      <link>/tags/supertag/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <title>graphics</title>
+      <link>https://vincent-p.github.io/tags/graphics/</link>
+      <pubDate>Sat, 02 Jan 2021 00:00:00 +0100</pubDate>
       
-      <guid>/tags/supertag/</guid>
+      <guid>https://vincent-p.github.io/tags/graphics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>maths</title>
+      <link>https://vincent-p.github.io/tags/maths/</link>
+      <pubDate>Sat, 02 Jan 2021 00:00:00 +0100</pubDate>
+      
+      <guid>https://vincent-p.github.io/tags/maths/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>vulkan</title>
+      <link>https://vincent-p.github.io/tags/vulkan/</link>
+      <pubDate>Sat, 02 Jan 2021 00:00:00 +0100</pubDate>
+      
+      <guid>https://vincent-p.github.io/tags/vulkan/</guid>
       <description></description>
     </item>
     
