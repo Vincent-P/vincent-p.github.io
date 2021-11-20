@@ -1,0 +1,11 @@
+title = "webv2"
+author = "Vincent Parizet"
+baseURL = "https://vincent-p.github.io/"
+languageCode = "en-us"
+theme = "my-theme"
+
+enableRobotsTXT = true
+
+# ox-hugo
+[markup.goldmark.renderer]
+  unsafe = true

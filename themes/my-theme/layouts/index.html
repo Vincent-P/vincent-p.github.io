@@ -1,0 +1,23 @@
+{{ define "main" }}
+
+<article>
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+
+  <section>
+    <h2>Latest posts:</h2>
+    {{ range ( where .Site.RegularPages "Type" "posts" ) }}
+    <p><a href="{{ .Permalink }}">{{ .Title }}</a></p>
+    {{end}}
+  </section>
+
+  <section>
+    <h2>Tags:</h2>
+    {{ range $taxonomyname, $taxonomy := .Site.Taxonomies.tags }}
+    <a href="{{ "/tags/" | relLangURL }}{{ $taxonomyname | urlize }}">{{ $taxonomyname }}</a>
+    {{ end }}
+  </section>
+
+</article>
+
+{{ end }}

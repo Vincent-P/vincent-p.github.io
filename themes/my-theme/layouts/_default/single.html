@@ -1,0 +1,36 @@
+{{ define "main" }}
+
+<aside>
+  <h2>Table of Contents</h2>
+  {{ .TableOfContents }}
+</aside>
+
+<article>
+  <header>
+    <h1>{{.Title}}</h1>
+
+    <hr/>
+    {{ $publishDate := .PublishDate.Format "2006-02-01" }}
+    {{ $updateDate := .Lastmod.Format "2006-02-01" }}
+    <p><time datetime="{{ $publishDate }}">{{ $publishDate }}</time> (Edited on: <time datetime="{{ $updateDate }}">{{ $updateDate }}</time>)</p>
+
+    {{ with .Params.tags }}
+    <p>Tags:
+      {{ range . }}
+      {{ $href := print (absURL "tags/") (urlize .) }}
+      <a href="{{ $href }}">{{ . }}</a>
+      {{ end }}
+    </p>
+    {{ end }}
+
+    {{ with .Params.comments_url }}
+    <p>If you have any questions or remarks, you can leave a comment <a href="{{ $.Params.comments_url }}">here</a>.</p>
+    {{ end }}
+    <hr/>
+  </header>
+
+  {{.Content}}
+
+</article>
+
+{{ end }}

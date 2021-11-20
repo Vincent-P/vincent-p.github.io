@@ -1,0 +1,12 @@
+
+<header>
+  <nav>
+    <ul>
+    {{ range $menu, $items := .Site.Menus }}
+        {{ range $items }}
+        <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+        {{ end }}
+    {{ end }}
+    </ul>
+  </nav>
+</header>

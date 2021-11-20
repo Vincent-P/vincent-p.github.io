@@ -1,0 +1,404 @@
++++
+title = "The perspective projection matrix in Vulkan"
+publishDate = 2021-01-02T00:00:00+01:00
+aliases = ["/notes/20201216234910-the_projection_matrix_in_vulkan"]
+lastmod = 2021-11-21T00:00:22+01:00
+tags = ["vulkan", "graphics", "maths"]
+draft = false
+comments_url = "https://www.reddit.com/r/GraphicsProgramming/comments/kpkoht/the_projection_matrix_in_vulkan/"
++++
+
+The perspective projection matrix is crucial in computer graphics to display 3d points on a screen.
+In most of the computer graphics/opengl/vulkan tutorials online there is only a brief mention of the `glm::perspective` function and its parameters, and quick "hacks" to make it work on Vulkan (Hello negative viewport and correction matrix).
+In these notes I will try to explain the maths behind the perspective projection and give a matrix that works with Vulkan.
+Don't worry you can still follow if you don't use Vulkan and adapt the formulas with **your** settings.
+
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="100%" height="100%" viewBox="0 0 1114 330" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;"><g id="everything-black"><path d="M490.5,188.711l-0,-4.125l124.5,0l0,-6.187l8.25,8.25l-8.25,8.25l0,-6.188l-124.5,0Z" style="stroke:#ebebeb;stroke-width:0.75px;"/><text x="406.089px" y="154.98px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:18px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">Pr<tspan x="424.953px " y="154.98px ">o</tspan>je<tspan x="447.021px " y="154.98px ">c</tspan>tion matrix + p<tspan x="578.799px " y="154.98px ">e</tspan>rsp<tspan x="610.281px 617.643px " y="154.98px 154.98px ">ec</tspan>tive divide</text></g><clipPath id="_clip1"><rect id="frustum" x="14.491" y="11.901" width="370.816" height="313.585"/></clipPath><g clip-path="url(#_clip1)"><g id="frustum1" serif:id="frustum"><g id="z-axis" serif:id="z axis"><path id="z-axis1" serif:id="z axis" d="M354.093,62.387l-293.386,213.891l-45.903,33.909" style="fill:none;stroke:#007bff;stroke-width:0.63px;stroke-dasharray:0.63,1.88,0,0;"/><use xlink:href="#_Image2" x="298.614" y="122.793" width="6.478px" height="6.478px" transform="matrix(0.925432,0,0,0.925432,0,2.13163e-14)"/><use xlink:href="#_Image2" x="172.02" y="214.688" width="6.478px" height="6.478px" transform="matrix(0.925432,0,0,0.925432,0,0)"/></g><g id="point-axis" serif:id="point axis"><path id="z-axis2" serif:id="z axis" d="M296.416,12.214l-277.878,312.959" style="fill:#c600ff;stroke:#c600ff;stroke-width:0.63px;stroke-dasharray:0.63,1.88,0,0;"/><use xlink:href="#_Image3" x="253.849" y="80.813" width="6.479px" height="6.479px" transform="matrix(0.925559,0,3.85341e-17,0.925559,0,1.06581e-14)"/><path d="M143.291,181.783c1.272,-0.468 2.685,0.185 3.153,1.457c0.468,1.272 -0.184,2.685 -1.456,3.153c-1.272,0.468 -2.685,-0.185 -3.153,-1.457c-0.469,-1.272 0.184,-2.685 1.456,-3.153Z" style="fill:#c600ff;stroke:#c600ff;stroke-width:1.57px;"/><path d="M190.409,128.153c1.272,-0.468 2.685,0.184 3.153,1.456c0.468,1.272 -0.184,2.685 -1.456,3.153c-1.272,0.469 -2.685,-0.184 -3.153,-1.456c-0.468,-1.272 0.184,-2.685 1.456,-3.153Z" style="fill:#c600ff;stroke:#c600ff;stroke-width:1.57px;"/></g><g id="gizmo"><path id="z" d="M65.906,272.785l-24.185,17.495" style="fill:none;stroke:#007bff;stroke-width:0.94px;"/><path id="y" d="M61.396,248.108l4.51,24.677" style="fill:none;stroke:#00ff12;stroke-width:0.94px;"/><path id="x" d="M65.906,272.785l21.744,10.336" style="fill:none;stroke:#f00;stroke-width:0.94px;"/></g><g id="everything-black1" serif:id="everything-black"><g id="frustum2" serif:id="frustum"><path id="near" d="M118.443,157.762l87.108,27.284" style="fill:none;stroke:#010001;stroke-width:0.63px;"/><path id="near1" serif:id="near" d="M205.551,185.046l2.581,63.049" style="fill:none;stroke:#010001;stroke-width:0.63px;"/><path id="near2" serif:id="near" d="M208.132,248.095l-82.499,-31.524" style="fill:none;stroke:#010001;stroke-width:0.63px;"/><path id="near3" serif:id="near" d="M125.633,216.571l-7.19,-58.809" style="fill:none;stroke:#010001;stroke-width:0.63px;"/><path id="far" d="M384.994,68.668l-188.871,-30.016" style="fill:none;stroke:#010001;stroke-width:0.63px;stroke-linecap:butt;stroke-miterlimit:2;"/><path id="far1" serif:id="far" d="M196.123,38.652l4.719,114.164" style="fill:none;stroke:#010001;stroke-width:0.63px;stroke-linecap:butt;stroke-miterlimit:2;"/><path id="far2" serif:id="far" d="M200.842,152.816l168.059,47.195" style="fill:none;stroke:#010001;stroke-width:0.63px;stroke-linecap:butt;stroke-miterlimit:2;"/><path id="far3" serif:id="far" d="M368.901,200.011l16.093,-131.343" style="fill:none;stroke:#010001;stroke-width:0.63px;stroke-linecap:butt;stroke-miterlimit:2;"/><path id="edge" d="M205.551,185.046l179.443,-116.378" style="fill:none;stroke:#010001;stroke-width:0.63px;"/><path id="edge1" serif:id="edge" d="M208.132,248.095l160.769,-48.084" style="fill:none;stroke:#010001;stroke-width:0.63px;"/><path id="edge2" serif:id="edge" d="M125.633,216.571l75.209,-63.755" style="fill:none;stroke:#010001;stroke-width:0.63px;"/><path id="edge3" serif:id="edge" d="M118.443,157.762l77.68,-119.11" style="fill:none;stroke:#010001;stroke-width:0.63px;"/></g><text id="x1" serif:id="x" x="90.702px" y="291.053px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:11.277px;stroke:#f00;stroke-width:0.04px;stroke-linecap:butt;stroke-miterlimit:2;">+X</text><text id="y1" serif:id="y" x="44.588px" y="244.319px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:11.277px;stroke:#f00;stroke-width:0.04px;stroke-linecap:butt;stroke-miterlimit:2;">+Y</text><text id="z1" serif:id="z" x="20.673px" y="289.725px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:11.277px;stroke:#f00;stroke-width:0.04px;stroke-linecap:butt;stroke-miterlimit:2;">+Z</text><text id="porjected-point" serif:id="porjected point" x="67.229px" y="183.269px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:11.277px;stroke:#f00;stroke-width:0.04px;stroke-linecap:butt;stroke-miterlimit:2;">(xp,yp,zp)</text><text id="eye-point" serif:id="eye point" x="149.214px" y="121.608px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:11.277px;stroke:#f00;stroke-width:0.04px;stroke-linecap:butt;stroke-miterlimit:2;">(xe,ye,ze)</text></g></g></g><clipPath id="_clip4"><rect id="clip_volume" x="723.523" y="14.771" width="363.307" height="307.845"/></clipPath><g clip-path="url(#_clip4)"><g id="clip-volume" serif:id="clip volume"><g id="everything-black2" serif:id="everything-black"><g id="halfcube"><path d="M807.066,231.016l58.02,-39.059" style="fill:none;stroke:#000;stroke-width:0.59px;"/><path d="M865.086,191.957l148.714,57.082" style="fill:none;stroke:#000;stroke-width:0.59px;"/><path d="M1013.8,249.039l-45.89,60.994" style="fill:none;stroke:#000;stroke-width:0.59px;"/><path d="M967.91,310.033l-160.844,-79.017" style="fill:none;stroke:#000;stroke-width:0.59px;"/><path d="M855.14,31.469l9.946,160.488" style="fill:none;stroke:#000;stroke-width:0.59px;"/><path d="M781.374,50.358l25.692,180.658" style="fill:none;stroke:#000;stroke-width:0.59px;"/><path d="M983.562,87.796l-15.652,222.237" style="fill:none;stroke:#000;stroke-width:0.59px;"/><path d="M781.374,50.358l73.766,-18.889" style="fill:none;stroke:#000;stroke-width:0.59px;"/><path d="M855.14,31.469l182.606,24.72" style="fill:none;stroke:#000;stroke-width:0.59px;"/><path d="M1037.75,56.189l-54.184,31.607" style="fill:none;stroke:#000;stroke-width:0.59px;"/><path d="M983.562,87.796l-202.188,-37.438" style="fill:none;stroke:#000;stroke-width:0.59px;"/><path d="M1037.75,56.189l-23.946,192.85" style="fill:none;stroke:#000;stroke-width:0.59px;"/></g><g id="points"><text x="721.393px" y="53.579px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:14.148px;stroke:#f00;stroke-width:0.04px;stroke-linecap:butt;stroke-miterlimit:2;">(-1,-1,0)</text><text x="828.903px" y="25.401px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:14.148px;stroke:#f00;stroke-width:0.04px;stroke-linecap:butt;stroke-miterlimit:2;">(-1,-1,1)</text><text x="1040.25px" y="56.054px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:14.148px;stroke:#f00;stroke-width:0.04px;stroke-linecap:butt;stroke-miterlimit:2;">(1,-1,1)</text><text x="948.426px" y="75.279px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:14.148px;stroke:#f00;stroke-width:0.04px;stroke-linecap:butt;stroke-miterlimit:2;">(1,-1,0)</text><text x="1016.77px" y="253.372px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:14.148px;stroke:#f00;stroke-width:0.04px;stroke-linecap:butt;stroke-miterlimit:2;">(1,1,1)</text><text x="970.631px" y="319.059px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:14.148px;stroke:#f00;stroke-width:0.04px;stroke-linecap:butt;stroke-miterlimit:2;">(1,1,0)</text><text x="755.28px" y="239.224px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:14.148px;stroke:#f00;stroke-width:0.04px;stroke-linecap:butt;stroke-miterlimit:2;">(-1,1,0)</text><text x="816.376px" y="192.184px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:14.148px;stroke:#f00;stroke-width:0.04px;stroke-linecap:butt;stroke-miterlimit:2;">(-1,1,0)</text></g><text x="920.245px" y="192.184px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:12.379px;stroke:#f00;stroke-width:0.04px;stroke-linecap:butt;stroke-miterlimit:2;">+X</text><text x="878.807px" y="227.957px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:12.379px;stroke:#f00;stroke-width:0.04px;stroke-linecap:butt;stroke-miterlimit:2;">+Y</text><text x="906.058px" y="158.725px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:12.379px;stroke:#f00;stroke-width:0.04px;stroke-linecap:butt;stroke-miterlimit:2;">+Z</text></g><path id="y-axis" serif:id="y axis" d="M866.928,66.194l10.558,199.443" style="fill:none;stroke:#0cfe13;stroke-width:0.59px;stroke-dasharray:1.18,2.95,0,0;"/><path id="x-axis" serif:id="x axis" d="M795.606,150.27l179.053,63.791" style="fill:none;stroke:#fb0704;stroke-width:0.59px;stroke-dasharray:1.18,2.95,0,0;"/><g id="gizmo1" serif:id="gizmo"><path d="M872.814,177.845l2.476,46.213" style="fill:none;stroke:#0cfe13;stroke-width:0.59px;"/><path d="M872.814,177.845l47.322,16.936" style="fill:none;stroke:#fb0704;stroke-width:0.59px;"/><path d="M872.814,177.845l32.794,-21.296" style="fill:none;stroke:#1f7bfe;stroke-width:0.59px;"/></g></g></g><defs><image id="_Image2" width="7px" height="7px" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAUElEQVQImXXOsRFAQBgF4e+uDhJGDfrRhlgZCroazEnog+TPuE133rxNYH16zJhwoNjSlUIsvuw5Fn/MGUNDjhlnQ9aM0pAlRW0X3yNq1N4vkjcQorX7VvAAAAAASUVORK5CYII="/><image id="_Image3" width="7px" height="7px" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAYElEQVQImXXOsQ2CUBgA4e9/qNEVKBiEyhZmYDi2oKViEBpG0KAJNi+RGLz2iruAyVaiRYEHxlrMMdkqdDj7sqJPuP8IuKBJuDnmlPD6I58JQ27sWTFGvq1y+4o3hlosH8FuE+nwvqAUAAAAAElFTkSuQmCC"/></defs></svg>
+
+<div class="figure-caption">
+  Figure 1: The frustum and the clip volume
+</div>
+
+The projection matrix is a transformation of the camera (or eye) space into clip space.
+The clip space is a homogeneous space that is used to remove (or clip) primitives outside the viewport.
+After clipping, the hardware will perform a "perspective division" that will transform the clip coordinates into normalized device coordinates by dividing each component by the 4th component w.
+
+
+## Near plane projection {#near-plane-projection}
+
+The first step consist of projecting points in eye space on the near plane of the frustum.
+Let's start by finding the values of \\(x\\) and \\(y\\), the depth will come later.
+
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="100%" height="100%" viewBox="0 0 888 751" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;"><g id="frustum"><g id="z-axis" serif:id="z axis"><path id="z-axis1" serif:id="z axis" d="M813.113,120.88l-702.458,512.122l-109.905,81.19" style="fill:none;stroke:#007bff;stroke-width:1.5px;stroke-dasharray:1.5,4.5,0,0;"/><circle cx="634.72" cy="251.343" r="5.88" style="fill:#007bff;stroke:#007bff;stroke-width:3.75px;"/><circle cx="354.216" cy="454.961" r="5.88" style="fill:#007bff;stroke:#007bff;stroke-width:3.75px;"/></g><g id="point-axis" serif:id="point axis"><path id="z-axis2" serif:id="z axis" d="M675.017,0.75l-665.327,749.322" style="fill:#c600ff;stroke:#c600ff;stroke-width:1.5px;stroke-dasharray:1.5,4.5,0,0;"/><path d="M533.578,152.833c3.046,-1.121 6.429,0.441 7.55,3.487c1.121,3.046 -0.442,6.428 -3.488,7.549c-3.045,1.121 -6.428,-0.441 -7.549,-3.487c-1.121,-3.046 0.442,-6.428 3.487,-7.549Z" style="fill:#c600ff;stroke:#c600ff;stroke-width:3.75px;"/><path d="M308.387,406.752c3.046,-1.121 6.429,0.442 7.55,3.487c1.121,3.046 -0.442,6.429 -3.487,7.55c-3.046,1.121 -6.429,-0.442 -7.55,-3.487c-1.121,-3.046 0.442,-6.429 3.487,-7.55Z" style="fill:#c600ff;stroke:#c600ff;stroke-width:3.75px;"/><path d="M421.203,278.344c3.046,-1.121 6.429,0.442 7.55,3.487c1.121,3.046 -0.442,6.429 -3.488,7.55c-3.045,1.121 -6.428,-0.442 -7.549,-3.488c-1.121,-3.045 0.442,-6.428 3.487,-7.549Z" style="fill:#c600ff;stroke:#c600ff;stroke-width:3.75px;"/></g><g id="gizmo"><path id="z" d="M123.103,624.64l-57.906,41.887" style="fill:none;stroke:#007bff;stroke-width:2.25px;"/><path id="y" d="M112.305,565.554l10.798,59.086" style="fill:none;stroke:#00ff12;stroke-width:2.25px;"/><path id="x" d="M123.103,624.64l52.061,24.748" style="fill:none;stroke:#f00;stroke-width:2.25px;"/></g><g id="everything-black"><g id="frustum1" serif:id="frustum"><path id="near" d="M248.894,349.237l208.563,65.328" style="fill:none;stroke:#010001;stroke-width:1.5px;"/><path id="near1" serif:id="near" d="M457.457,414.565l6.18,150.959" style="fill:none;stroke:#010001;stroke-width:1.5px;"/><path id="near2" serif:id="near" d="M463.637,565.524l-197.528,-75.479" style="fill:none;stroke:#010001;stroke-width:1.5px;"/><path id="near3" serif:id="near" d="M266.109,490.045l-17.215,-140.808" style="fill:none;stroke:#010001;stroke-width:1.5px;"/><path id="far" d="M887.101,135.919l-452.217,-71.867" style="fill:none;stroke:#010001;stroke-width:1.5px;stroke-linecap:butt;stroke-miterlimit:2;"/><path id="far1" serif:id="far" d="M434.884,64.052l11.299,273.344" style="fill:none;stroke:#010001;stroke-width:1.5px;stroke-linecap:butt;stroke-miterlimit:2;"/><path id="far2" serif:id="far" d="M446.183,337.396l402.385,112.999" style="fill:none;stroke:#010001;stroke-width:1.5px;stroke-linecap:butt;stroke-miterlimit:2;"/><path id="far3" serif:id="far" d="M848.568,450.395l38.533,-314.476" style="fill:none;stroke:#010001;stroke-width:1.5px;stroke-linecap:butt;stroke-miterlimit:2;"/><path id="edge" d="M457.457,414.565l429.644,-278.646" style="fill:none;stroke:#010001;stroke-width:1.5px;"/><path id="edge1" serif:id="edge" d="M463.637,565.524l384.931,-115.129" style="fill:none;stroke:#010001;stroke-width:1.5px;"/><path id="edge2" serif:id="edge" d="M266.109,490.045l180.074,-152.649" style="fill:none;stroke:#010001;stroke-width:1.5px;"/><path id="edge3" serif:id="edge" d="M248.894,349.237l185.99,-285.185" style="fill:none;stroke:#010001;stroke-width:1.5px;"/></g><text id="x1" serif:id="x" x="182.473px" y="668.377px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:27px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">+X</text><text id="y1" serif:id="y" x="72.062px" y="556.482px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:27px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">+Y</text><text id="z1" serif:id="z" x="14.802px" y="665.199px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:27px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">+Z</text><text id="porjected-point" serif:id="porjected point" x="126.271px" y="410.309px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:27px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">(xp,yp,zp)</text><text id="eye-point" serif:id="eye point" x="322.57px" y="262.673px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:27px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">(xe,ye,ze)</text></g></g></svg>
+
+<div class="figure-caption">
+  Figure 2: The frustum volume
+</div>
+
+The frustum is a big pyramid with the camera as apex: there are similar triangles for each coordinate.
+Using the Intercept theorem (also known as Thales's theorem) it's easy to find the value of \\(x\_p\\) and \\(y\_p\\).
+
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="100%" height="100%" viewBox="0 0 1120 451" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;"><g id="side-view" serif:id="side view"><g id="everything-black"><path id="ze" d="M778.574,66.217l0,318.645" style="fill:none;stroke:#000;stroke-width:1.5px;stroke-dasharray:1.5,4.5,0,0;"/><text x="343.145px" y="123.397px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:27px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">(zp,yp)</text><text x="787.69px" y="95.92px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:27px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">(ze,ye)</text><text x="8.236px" y="206.774px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:27px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">+Z</text><text x="71.251px" y="148.951px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:27px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">+Y</text><g id="frustum"><path d="M1054.85,0.75l-636.038,149.84" style="fill:none;stroke:#000;stroke-width:1.5px;"/><path d="M1054.85,0.75l-0.017,449.046" style="fill:none;stroke:#000;stroke-width:1.5px;"/><path d="M418.81,300.054l636.021,149.742" style="fill:none;stroke:#000;stroke-width:1.5px;"/><path d="M418.81,300.054l-0,-149.464" style="fill:none;stroke:#000;stroke-width:1.5px;"/></g></g><path id="z-axis" serif:id="z axis" d="M0.75,225.345l1118.27,0" style="fill:none;stroke:#1f7bfe;stroke-width:1.5px;stroke-dasharray:1.5,4.5,0,0;"/><path id="point-axis" serif:id="point axis" d="M1.846,240.164l1106.11,-164.494" style="fill:none;stroke:#c60dfc;stroke-width:1.5px;stroke-dasharray:1.5,4.5,0,0;"/><g id="gizmo"><path id="z" d="M38.681,225.345l62.807,0" style="fill:none;stroke:#1f7bfe;stroke-width:1.5px;"/><path id="y" d="M101.488,225.345l0,-63.309" style="fill:none;stroke:#0cfe13;stroke-width:1.5px;"/></g><path id="hit2" d="M416.476,173.322c3.046,-1.121 6.428,0.442 7.549,3.487c1.121,3.046 -0.441,6.429 -3.487,7.55c-3.045,1.121 -6.428,-0.442 -7.549,-3.488c-1.121,-3.045 0.441,-6.428 3.487,-7.549Z" style="fill:#c600ff;stroke:#c600ff;stroke-width:3.75px;"/><path id="hit1" d="M776.543,119.11c3.046,-1.121 6.428,0.442 7.549,3.487c1.121,3.046 -0.441,6.429 -3.487,7.55c-3.045,1.121 -6.428,-0.442 -7.549,-3.487c-1.121,-3.046 0.441,-6.429 3.487,-7.55Z" style="fill:#c600ff;stroke:#c600ff;stroke-width:3.75px;"/><g transform="matrix(0.75,0,0,0.75,-74.1309,-315.548)"><text x="609.358px" y="753.807px" style="font-family:'CMUSerif-Roman', 'CMU Serif';font-weight:500;font-size:36px;fill:#1f7bfe;">-</text><text x="621.346px" y="753.807px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:36px;fill:#1f7bfe;">n</text></g><text x="1025.25px" y="250.738px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:27px;fill:#1f7bfe;">-f</text></g></svg>
+
+<div class="figure-caption">
+  Figure 3: Side view of the frustum, the top view is similar
+</div>
+
+The intercept theorem tells us that the ratio between a point projected on the near plane and the coordinate in eye space is the same: \\[ \frac{x\_p}{x\_e} = \frac{y\_p}{y\_e} = \frac{z\_p}{z\_e} = \frac{-n}{z\_e} \\]
+
+\\(z\_p\\) will always be \\(-n\\) because we are projecting points on the near plane.
+
+In the end we have:
+
+\begin{aligned}
+& x\_p = \frac{-n x\_e}{z\_e} & = \frac{1}{-z\_e} n x\_e\\\\
+& y\_p = \frac{-n y\_e}{z\_e} & = \frac{1}{-z\_e} n y\_e\\\\
+& z\_p = -n & = \frac{1}{-z\_e} n z\_e
+\end{aligned}
+
+One thing to note here is that \\(x\_p\\) and \\(y\_p\\) are inversely proportional to \\(z\_e\\).
+But the result of a multiplication between a matrix and a vector is a linear combination of its components, it's **not** possible to divide by a component.
+Fortunately for us, the hardware will divide the components of each clip coordinate by \\(w\_c\\), so we will take advantage of it and set it to \\(-z\_e\\).
+
+\\[ w\_c = -1 \times z\_e \\]
+
+\begin{equation}
+\begin{pmatrix}
+. & . & . & .\\\\
+. & . & . & .\\\\
+. & . & . & .\\\\
+0 & 0 & -1 & 0
+\end{pmatrix}
+\begin{pmatrix}
+x\_e \\\\
+y\_e \\\\
+z\_e \\\\
+1
+\end{pmatrix}=
+\begin{pmatrix}
+x\_c \\\\
+y\_c \\\\
+z\_c \\\\
+w\_c
+\end{pmatrix}
+\end{equation}
+
+
+## Mapping from the near frustum plane to the near clip plane {#mapping-from-the-near-frustum-plane-to-the-near-clip-plane}
+
+Now that we have expressed \\(x\_p\\) and \\(y\_p\\) in terms of \\(x\_e\\) and \\(y\_e\\), let's try to express their normalized device coordinates \\(x\_n\\) and \\(y\_n\\).
+The normalized device coordinates are the clip coordinates divided by their 4th component:
+
+\begin{aligned}
+\begin{pmatrix}
+x\_n \\\\
+y\_n \\\\
+z\_n \\\\
+w\_n
+\end{pmatrix}=
+\begin{pmatrix}
+\frac{x\_c}{w\_c} \\\\
+\frac{y\_c}{w\_c} \\\\
+\frac{z\_c}{w\_c} \\\\
+\frac{w\_c}{w\_c}
+\end{pmatrix}
+\end{aligned}
+
+The near plane of our frustum is defined by 4 corners \\((l, t)\\), \\((r, t)\\), \\((r, b)\\) and \\((l, b)\\).
+We want to match these with \\((-1, -1)\\), \\((1, -1)\\), \\((1, 1)\\) and \\((-1, 1)\\) respectively.
+
+**<span class="underline">Note</span>**: If you have a different clip space, you will have to adjust the corners of the near clip plane!
+Vulkan is different from other graphics APIs and uses a downward Y axis, and uses the same clip depth as DirectX (0 to 1).
+
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="100%" height="100%" viewBox="0 0 1118 443" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;"><g id="frustum"><g id="everything-black"><g id="frustum1" serif:id="frustum"><path id="near" d="M33.448,234.989l151.976,47.603" style="fill:none;stroke:#010001;stroke-width:1.5px;"/><path id="near1" serif:id="near" d="M185.424,282.592l4.503,110.002" style="fill:none;stroke:#010001;stroke-width:1.5px;"/><path id="near2" serif:id="near" d="M189.927,392.594l-143.934,-55.001" style="fill:none;stroke:#010001;stroke-width:1.5px;"/><path id="near3" serif:id="near" d="M45.993,337.593l-12.545,-102.604" style="fill:none;stroke:#010001;stroke-width:1.5px;"/><path id="far" d="M498.499,79.548l-329.523,-52.369" style="fill:none;stroke:#010001;stroke-width:1.5px;stroke-linecap:butt;stroke-miterlimit:2;"/><path id="far1" serif:id="far" d="M168.976,27.179l8.234,199.182" style="fill:none;stroke:#010001;stroke-width:1.5px;stroke-linecap:butt;stroke-miterlimit:2;"/><path id="far2" serif:id="far" d="M177.21,226.361l293.21,82.34" style="fill:none;stroke:#010001;stroke-width:1.5px;stroke-linecap:butt;stroke-miterlimit:2;"/><path id="far3" serif:id="far" d="M470.42,308.701l28.079,-229.153" style="fill:none;stroke:#010001;stroke-width:1.5px;stroke-linecap:butt;stroke-miterlimit:2;"/><path id="edge" d="M185.424,282.592l313.075,-203.044" style="fill:none;stroke:#010001;stroke-width:1.5px;"/><path id="edge1" serif:id="edge" d="M189.927,392.594l280.493,-83.893" style="fill:none;stroke:#010001;stroke-width:1.5px;"/><path id="edge2" serif:id="edge" d="M45.993,337.593l131.217,-111.232" style="fill:none;stroke:#010001;stroke-width:1.5px;"/><path id="edge3" serif:id="edge" d="M33.448,234.989l135.528,-207.81" style="fill:none;stroke:#010001;stroke-width:1.5px;"/></g><text x="-2.941px" y="347.24px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:19.674px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">(l,b)</text><text x="184.431px" y="410.724px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:19.674px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">(r,b)</text><text x="192.931px" y="298.196px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:19.674px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">(r,t)</text><text x="-2.941px" y="241.63px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:19.674px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">(l,t)</text></g></g><g id="clip-volume" serif:id="clip volume"><g id="everything-black1" serif:id="everything-black"><g id="halfcube"><path d="M766.826,303.245l87.954,-59.211" style="fill:none;stroke:#000;stroke-width:1.5px;"/><path d="M854.78,244.034l225.436,86.532" style="fill:none;stroke:#000;stroke-width:1.5px;"/><path d="M1080.22,330.566l-69.565,92.462" style="fill:none;stroke:#000;stroke-width:1.5px;"/><path d="M1010.65,423.028l-243.825,-119.783" style="fill:none;stroke:#000;stroke-width:1.5px;"/><path d="M839.702,0.75l15.078,243.284" style="fill:none;stroke:#000;stroke-width:1.5px;"/><path d="M727.88,29.383l38.946,273.862" style="fill:none;stroke:#000;stroke-width:1.5px;"/><path d="M1034.38,86.137l-23.727,336.891" style="fill:none;stroke:#000;stroke-width:1.5px;"/><path d="M727.88,29.383l111.822,-28.633" style="fill:none;stroke:#000;stroke-width:1.5px;"/><path d="M839.702,0.75l276.814,37.473" style="fill:none;stroke:#000;stroke-width:1.5px;"/><path d="M1116.52,38.223l-82.138,47.914" style="fill:none;stroke:#000;stroke-width:1.5px;"/><path d="M1034.38,86.137l-306.498,-56.754" style="fill:none;stroke:#000;stroke-width:1.5px;"/><path d="M1116.52,38.223l-36.3,292.343" style="fill:none;stroke:#000;stroke-width:1.5px;"/></g><g id="points"><text x="657.343px" y="37.51px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:21.447px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">(-1,-1)</text><text x="1014.78px" y="436.71px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:21.447px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">(1,1)</text><text x="701.298px" y="316.151px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:21.447px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">(-1,1)</text><text x="1044.77px" y="104.836px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:21.447px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">(1,-1)</text></g></g></g><g id="everything-black2" serif:id="everything-black"><path d="M527.853,270.746l-0,-4.125l124.5,-0l-0,-6.188l8.25,8.25l-8.25,8.25l-0,-6.187l-124.5,-0Z" style="stroke:#ebebeb;stroke-width:0.75px;"/></g></svg>
+
+<div class="figure-caption">
+  Figure 4: The mapping of the corners of the frustum to the corners of the clip volume
+</div>
+
+The mapping of the near frustum plane to the near clip plane is a linear function of the form \\(f(x) = \alpha x + \beta\\).
+We can use the formula to find the slope of the function and then, by replacing the known values in the function, we can find the constant term:
+
+Starting with the \\(x\\) coordinate:
+
+\begin{aligned}
+& f(l) = -1 \quad \text{and} \quad f( r) = 1\\\\
+\Rightarrow \quad & \alpha = \frac{1 - (-1)}{r - l} = \frac{2}{r-l} \\\\
+\\\\
+& f( r) = 1\\\\
+\Rightarrow \quad & f( r) = 1 = \frac{2}{r - l} r + \beta \\\\
+\Leftrightarrow \quad &\beta = 1 - \frac{2r}{r-l} =  -\frac{r+l}{r-l}\\\\
+\\\\
+& f(x\_p) = \frac{2}{r-l} x\_p - \frac{r+l}{r-l} = x\_n\\\\
+& x\_n = \frac{2}{r-l} x\_p - \frac{r+l}{r-l}
+\end{aligned}
+
+The same goes for finding \\(y\\):
+
+\begin{aligned}
+                        & f(t) = -1 \quad \text{and} \quad f(b) = 1 \\\\
+\Rightarrow \quad & \alpha = \frac{1 - (-1)}{b - t} = \frac{2}{b-t} \\\\
+\\\\
+                            & f(b) = 1\\\\
+\Rightarrow \quad     & f(b) = 1 = \frac{2}{b - t} b + \beta \\\\
+\Leftrightarrow \quad &\beta = 1 - \frac{2b}{b-t} = -\frac{b+t}{b-t}\\\\
+\\\\
+& f(y\_p) = \frac{2}{b-t} y\_p - \frac{b+t}{b-t} = y\_n\\\\
+& y\_n = \frac{2}{b-t} y\_p - \frac{b+t}{b-t}
+\end{aligned}
+
+Now we just have to replace \\(x\_p\\) and \\(y\_p\\) by the expressions we found earlier in terms of \\(x\_e\\) and \\(y\_e\\).
+
+\begin{aligned}
+x\_n &= \frac{2}{r-l} x\_p - \frac{r+l}{r-l}\\\\
+     &= \frac{2}{r-l} \left(\frac{1}{-z\_e} n x\_e\right) - \frac{r+l}{r-l}\\\\
+     &= \frac{1}{-z\_e} \left( \frac{2n}{r-l} x\_e + \frac{r+l}{r-l} z\_e \right)\\\\
+\\\\
+y\_n &= \frac{2}{b-t} y\_p - \frac{b+t}{b-t}\\\\
+     &= \frac{2}{b-t} \left(\frac{1}{-z\_e} n y\_e\right) - \frac{b+t}{b-t}\\\\
+     &= \frac{1}{-z\_e} \left( \frac{2n}{b-t} y\_e + \frac{b+t}{b-t} z\_e \right)
+\end{aligned}
+
+Remember that \\(x\_n = x\_c / w\_c\\) and \\(y\_n = y\_c / w\_c\\). By factoring by \\(\frac{1}{-z\_e}\\), we can read the coefficients for \\(x\_c\\) and \\(y\_c\\).
+We now have:
+
+\begin{equation}
+\begin{pmatrix}
+\frac{2n}{r-l} & 0 & \frac{r+l}{r-l} & 0\\\\
+0 & \frac{2n}{b-t} & \frac{b+t}{b-t} & 0\\\\
+. & . & . & .\\\\
+0 & 0 & -1 & 0
+\end{pmatrix}
+\begin{pmatrix}
+x\_e \\\\
+y\_e \\\\
+z\_e \\\\
+1
+\end{pmatrix}=
+\begin{pmatrix}
+x\_c \\\\
+y\_c \\\\
+z\_c \\\\
+w\_c
+\end{pmatrix}
+\end{equation}
+
+
+## Finding the depth mapping {#finding-the-depth-mapping}
+
+Unfortunately, we cannot use the same method to find the coefficients for z, because z will always be on the near plane after projecting to the near plane.
+We know that the z coordinate does not depend on x and y, so let's fill the remaining row with 0 for x and y, and A and B for the coefficients we need to find.
+
+\begin{equation}
+\begin{pmatrix}
+\frac{2n}{r-l} & 0 & \frac{r+l}{r-l} & 0\\\\
+0 & \frac{2n}{b-t} & \frac{b+t}{b-t} & 0\\\\
+0 & 0 & A & B\\\\
+0 & 0 & -1 & 0
+\end{pmatrix}
+\begin{pmatrix}
+x\_e \\\\
+y\_e \\\\
+z\_e \\\\
+1
+\end{pmatrix}=
+\begin{pmatrix}
+x\_c \\\\
+y\_c \\\\
+z\_c \\\\
+w\_c
+\end{pmatrix}
+\end{equation}
+
+By definition \\(z\_n\\) is :
+
+\\[ z\_n = \frac{z\_c}{w\_c} = \frac{A \times z\_e + B \times w\_e}{-z\_e} \\]
+
+\\(w\_e\\) is always going to be 1.
+
+\\[ z\_n = \frac{z\_c}{w\_c} = \frac{A \times z\_e + B}{-z\_e} \\]
+
+Once again we know that when \\(z\_e\\) is on the near plane \\(z\_n\\) should be \\(1\\) and when on the far plane \\(z\_n\\) should be \\(0\\).
+
+**<span class="underline">Note</span>**: Using \\(1\\) for the near plane and \\(0\\) for the far plane is called "Reverse Depth", it results in a better distribution of the floating points values than using \\(-1\\) and \\(1\\) or \\(0\\) and \\(1\\) so just use it.
+
+\begin{aligned}
+& z\_n = 1 \Rightarrow z\_e = -n\\\\
+& z\_n = 0 \Rightarrow z\_e = -f
+\end{aligned}
+
+\begin{aligned}
+& \left\\{
+  \begin{array}{lr}
+  \frac{A \times \left(-n\right) + B}{-(-n)} = 1\\\\
+  \frac{A \times \left(-f\right) + B}{-(-f)} = 0
+  \end{array}
+  \right.\\\\
+\\\\
+\Leftrightarrow \quad &
+  \left\\{
+  \begin{array}{lr}
+  A \times (-n) + B = n\\\\
+  A \times (-f) + B = 0
+  \end{array}
+  \right.\\\\
+\\\\
+\Leftrightarrow \quad &
+  \left\\{
+  \begin{array}{lr}
+  A \times (-n) + Af = n\\\\
+  B = A f
+  \end{array}
+  \right.\\\\
+\\\\
+\Leftrightarrow \quad &
+  \left\\{
+  \begin{array}{lr}
+  A = \frac{n}{f-n}\\\\
+  B = \frac{nf}{f-n}
+  \end{array}
+  \right.
+\end{aligned}
+
+Here is our final expression for \\(z\_n\\):
+
+\\[ z\_n = \frac{1}{-z\_e} \left({\frac{n}{f-n} \times z\_e + \frac{nf}{f-n}}\right) \\]
+
+Our matrix is now complete!
+
+\begin{equation}
+\begin{pmatrix}
+\frac{2n}{r-l} & 0 & \frac{r+l}{r-l} & 0\\\\
+0 & \frac{2n}{b-t} & \frac{b+t}{b-t} & 0\\\\
+0 & 0 & \frac{n}{f-n} & \frac{nf}{f-n}\\\\
+0 & 0 & -1 & 0
+\end{pmatrix}
+\begin{pmatrix}
+x\_e \\\\
+y\_e \\\\
+z\_e \\\\
+1
+\end{pmatrix}=
+\begin{pmatrix}
+x\_c \\\\
+y\_c \\\\
+z\_c \\\\
+w\_c
+\end{pmatrix}
+\end{equation}
+
+
+## Using it in practice {#using-it-in-practice}
+
+Usually a frustum is symmetric, that is \\(l = -r\\) and \\(b = -t\\).
+The matrix becomes a bit simpler:
+
+\begin{aligned}
+& l = -r \Rightarrow l + r = 0 \quad \text{and} \quad  r - l = 2r = width\\\\
+& b = -t \Rightarrow b + t = 0 \quad \text{and} \quad  b - t = -2t = -height
+\end{aligned}
+
+\begin{equation}
+\begin{pmatrix}
+\frac{2n}{width} & 0 & 0 & 0\\\\
+0 & -\frac{2n}{height} & 0 & 0\\\\
+0 & 0 & \frac{n}{f-n} & \frac{nf}{f-n}\\\\
+0 & 0 & -1 & 0
+\end{pmatrix}
+\begin{pmatrix}
+x\_e \\\\
+y\_e \\\\
+z\_e \\\\
+1
+\end{pmatrix}=
+\begin{pmatrix}
+x\_c \\\\
+y\_c \\\\
+z\_c \\\\
+w\_c
+\end{pmatrix}
+\end{equation}
+
+It's also easier to reason on the field of view and aspect ratios rather than on the width and the height of the near plane, so let's replace them:
+
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="100%" height="100%" viewBox="0 0 637 257" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;"><g id="similar-triangles" serif:id="similar triangles"><path id="z-axis-dots" serif:id="z axis dots" d="M613.693,204.831l-590.818,-0" style="fill:none;stroke:#1f7bfe;stroke-width:2.25px;stroke-dasharray:2.25,6.75,0,0;"/><g id="gizmo"><path id="z" d="M168.483,204.831l-69.857,-0" style="fill:none;stroke:#007bff;stroke-width:2.25px;"/><path id="y" d="M168.342,204.831l0,-69.857" style="fill:none;stroke:#00ff12;stroke-width:2.25px;"/></g><g id="_-n-and--f" serif:id="-n and -f"><g transform="matrix(0.698567,0,0,0.698567,-17.4666,-283.645)"><text x="609.358px" y="753.807px" style="font-family:'CMUSerif-Roman', 'CMU Serif';font-weight:500;font-size:30px;fill:#1f7bfe;">-</text><text x="619.348px" y="753.807px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:30px;fill:#1f7bfe;">n</text></g><g transform="matrix(0.698567,0,0,0.698567,137.376,-283.318)"><text x="609.358px" y="753.807px" style="font-family:'CMUSerif-Roman', 'CMU Serif';font-weight:500;font-size:30px;fill:#1f7bfe;">-</text><text x="619.348px" y="753.807px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:30px;fill:#1f7bfe;">f</text></g></g><g id="everything-black"><g id="fov-angle" serif:id="fov angle"><path id="angle" d="M248.427,204.192c0,-11.886 -2.708,-23.615 -7.918,-34.298l-2.11,1.029c5.054,10.362 7.681,21.74 7.681,33.269l2.347,-0Z" style="stroke:#f00;stroke-width:0.1px;"/><text id="text6" x="251.921px" y="193.311px" style="font-family:'CMUSerif-Roman', 'CMU Serif';font-weight:500;font-size:25.148px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;"></text></g><g id="height"><path id="text5" d="M414.266,92.357l-1.429,0l2.198,-2.198l2.199,2.198l-1.429,0l-0,103.042l1.429,0l-2.199,2.198l-2.198,-2.198l1.429,0l-0,-103.042Z" style="stroke:#f00;stroke-width:0.1px;"/><text id="text3" x="314.697px" y="162.688px" style="font-family:'CMUSerif-Roman', 'CMU Serif';font-weight:500;font-size:25.148px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">heigh<tspan x="372.614px " y="162.688px ">t</tspan>/2</text></g><g id="width"><path id="text4" d="M183.563,218.696l-0,1.428l-2.198,-2.198l2.198,-2.198l-0,1.429l220.401,-0l-0,-1.429l2.198,2.198l-2.198,2.198l-0,-1.428l-220.401,-0Z" style="stroke:#f00;stroke-width:0.1px;"/><text id="text2" x="280.309px" y="237.52px" style="font-family:'CMUSerif-Roman', 'CMU Serif';font-weight:500;font-size:25.148px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">n</text></g><text id="formula" x="181.079px" y="62.684px" style="font-family:'CMUSerif-Italic', 'CMU Serif';font-weight:500;font-style:italic;font-size:25.148px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">tan(θ) = height / 2n</text><path id="near-plane" serif:id="near plane" d="M421.922,82.582l0,122.249" style="fill:none;stroke:#010001;stroke-width:2.25px;"/><path id="far-plane" serif:id="far plane" d="M571.415,9.875l0,194.956" style="fill:none;stroke:#010001;stroke-width:2.25px;"/><path id="frustum-top" serif:id="frustum top" d="M571.415,9.875l-149.702,72.6" style="fill:none;stroke:#010001;stroke-width:2.25px;"/><text id="text8" x="58.117px" y="192.347px" style="font-family:'CMUSerif-Roman', 'CMU Serif';font-weight:500;font-size:20.957px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">+Z</text><text id="text9" x="131.681px" y="121.347px" style="font-family:'CMUSerif-Roman', 'CMU Serif';font-weight:500;font-size:20.957px;stroke:#f00;stroke-width:0.1px;stroke-linecap:butt;stroke-miterlimit:2;">+Y</text><path id="frustum-top-dots" serif:id="frustum top dots" d="M421.713,82.475l-253.23,122.806" style="fill:#010001;stroke:#000;stroke-width:2.25px;stroke-dasharray:2.25,6.75,0,0;"/></g></g></svg>
+
+<div class="figure-caption">
+  Figure 5: Diagram of the field of view
+</div>
+
+We want to replace the coefficients using the width and height: \\(\frac{2n}{width}\\) and \\(-\frac{2n}{height}\\).
+
+\begin{aligned}
+& \tan\left(\frac{fov\_y}{2}\right) = \frac{\frac{height}{2}}{n} \\\\
+\Leftrightarrow \quad & 2n \tan\left(\frac{fov\_y}{2}\right) = height \\\\
+\Leftrightarrow \quad & \frac{2n}{height} = \frac{1}{\tan\left(\frac{fov\_y}{2}\right)}
+\end{aligned}
+
+\begin{aligned}
+\frac{2n}{width} & = \frac{2n}{width} \times \frac{height}{height} \\\\
+& = \frac{2n}{height} \times \frac{height}{width} \\\\
+& = \frac{2n}{height} \left(\frac{width}{height}\right)^{-1} \\\\
+& = \frac{1}{\tan\left(\frac{fov\_y}{2}\right)} \left(\frac{width}{height}\right)^{-1}
+\end{aligned}
+
+Final matrix with the field of view and aspect ratio:
+
+\begin{aligned}
+& \text{focal length} =  \frac{1}{\tan\left(\frac{fov\_y}{2}\right)}\\\\
+\\\\
+& \text{aspect ratio} =  \frac{width}{height}\\\\
+\\\\
+&
+\begin{pmatrix}
+\frac{\text{focal length}}{\text{aspect ratio}} & 0 & 0 & 0\\\\
+0 & -{\text{focal length}} & 0 & 0\\\\
+0 & 0 & \frac{n}{f-n} & \frac{nf}{f-n}\\\\
+0 & 0 & -1 & 0
+\end{pmatrix}
+\begin{pmatrix}
+x\_e \\\\
+y\_e \\\\
+z\_e \\\\
+1
+\end{pmatrix}=
+\begin{pmatrix}
+x\_c \\\\
+y\_c \\\\
+z\_c \\\\
+w\_c
+\end{pmatrix}
+\end{aligned}
+
+Bonus: here is my c++ code for the perspective matrix:
+
+```cpp
+float4x4 perspective(float fov, float aspect_ratio, float n, float f, float4x4 *inverse)
+{
+    float focal_length = 1.0f / std::tan(to_radians(fov) / 2.0f);
+
+    float x  =  focal_length / aspect_ratio;
+    float y  = -focal_length;
+    float A  = n / (f - n);
+    float B  = f * A;
+
+    float4x4 projection({
+        x,    0.0f,  0.0f, 0.0f,
+        0.0f,    y,  0.0f, 0.0f,
+        0.0f, 0.0f,     A,    B,
+        0.0f, 0.0f, -1.0f, 0.0f,
+    });
+
+    if (inverse)
+    {
+        *inverse = float4x4({
+            1/x,  0.0f, 0.0f,  0.0f,
+            0.0f,  1/y, 0.0f,  0.0f,
+            0.0f, 0.0f, 0.0f, -1.0f,
+            0.0f, 0.0f,  1/B,   A/B,
+        });
+    }
+
+    return projection;
+}
+```
