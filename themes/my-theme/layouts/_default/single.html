@@ -10,8 +10,8 @@
     <h1>{{.Title}}</h1>
 
     <hr/>
-    {{ $publishDate := .PublishDate.Format "2006-02-01" }}
-    {{ $updateDate := .Lastmod.Format "2006-02-01" }}
+    {{ $publishDate := .PublishDate.Format "2006-01-02" }}
+    {{ $updateDate := .Lastmod.Format "2006-01-02" }}
     <p><time datetime="{{ $publishDate }}">{{ $publishDate }}</time> (Edited on: <time datetime="{{ $updateDate }}">{{ $updateDate }}</time>)</p>
 
     {{ with .Params.tags }}
