@@ -7,6 +7,11 @@ theme = "my-theme"
 enableRobotsTXT = true
 publishDir = "docs"
 
-# ox-hugo
-[markup.goldmark.renderer]
-  unsafe = true
+[markup]
+  [markup.tableOfContents]
+    ordered = true
+    startLevel = 2
+    endLevel = 3
+  # ox-hugo
+  [markup.goldmark.renderer]
+    unsafe = true
