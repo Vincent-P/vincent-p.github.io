@@ -13,6 +13,12 @@
 /* Spacings */
 ul {
     margin: 0;
+    padding: 0;
+}
+
+/* first list shouldn't be indented */
+nav > ol {
+    padding: 0;
 }
 
 header p {
@@ -38,10 +44,6 @@ main > article {
 aside h2 {
     margin-top: 1rem;
     margin-bottom: 0.5rem;
-}
-
-aside ul {
-    padding: 0;
 }
 
 
@@ -111,12 +113,12 @@ ul {
     list-style-type: "• ";
 }
 
-aside ul {
+aside ol {
     list-style: none;
 }
 
 /* https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type#accessibility_concerns */
-aside ul li::before {
+aside ol li::before {
     content: "\200B";
 }
 
@@ -178,6 +180,11 @@ body {
 }
 
 @media only screen and (max-width: 1280px) {
+    html, body {
+        width: auto;
+        height: auto;
+    }
+
     body {
         grid-template-columns: 1fr;
         grid-template-rows: auto auto 1fr auto;
