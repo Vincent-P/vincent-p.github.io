@@ -6,6 +6,7 @@ lastmod = 2021-11-22T00:07:51+01:00
 tags = ["vulkan", "graphics", "maths"]
 draft = false
 comments_url = "https://www.reddit.com/r/GraphicsProgramming/comments/kpkoht/the_projection_matrix_in_vulkan/"
+maths = true
 +++
 
 The perspective projection matrix is crucial in computer graphics to display 3d points on a screen.
