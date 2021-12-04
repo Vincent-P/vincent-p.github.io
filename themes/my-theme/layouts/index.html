@@ -6,8 +6,12 @@
 
   <section>
     <h2>Latest posts:</h2>
-    {{ range ( where .Site.RegularPages "Type" "posts" ) }}
-    <p><a href="{{ .Permalink }}">{{ .Title }}</a></p>
+
+    {{ $posts           := where .Site.RegularPages "Type" "posts" }}
+    {{ $published_posts := where $posts "Draft" false }}
+
+    {{ range $published_posts }}
+        <p><a href="{{ .Permalink }}">{{ .Title }}</a></p>
     {{end}}
   </section>
 

@@ -9,7 +9,7 @@
 
   <!-- Ranges through content/posts/*.md -->
   <ul>
-      {{ range .Pages }}
+      {{ range (where .Pages "Draft" false) }}
       <li>
         <a href="{{.Permalink}}">{{.Title}}</a>
       </li>
