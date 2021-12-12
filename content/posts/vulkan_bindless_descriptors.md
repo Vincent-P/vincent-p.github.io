@@ -1,9 +1,9 @@
 +++
 title = "Bindless descriptor sets"
 publishDate = 2021-12-01T00:00:00+01:00
-lastmod = 2021-12-04T12:57:57+01:00
+lastmod = 2021-12-12T10:39:17+01:00
 tags = ["vulkan", "graphics"]
-draft = true
+draft = false
 +++
 
 ## What is bindless {#what-is-bindless}
