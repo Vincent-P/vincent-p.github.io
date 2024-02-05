@@ -9,23 +9,26 @@
   <header>
     <h1>{{.Title}}</h1>
 
-    <hr/>
     {{ $publishDate := .PublishDate.Format "2006-01-02" }}
     {{ $updateDate := .Lastmod.Format "2006-01-02" }}
-    <p><time datetime="{{ $publishDate }}">{{ $publishDate }}</time> (Edited on: <time datetime="{{ $updateDate }}">{{ $updateDate }}</time>)</p>
+    <p>
+      <time datetime="{{ $publishDate }}">{{ $publishDate }}</time>
+      (Edited on: <time datetime="{{ $updateDate }}">{{ $updateDate }}</time>)
+      <br />
 
-    {{ with .Params.tags }}
-    <p>Tags:
-      {{ range . }}
-      {{ $href := print (absURL "tags/") (urlize .) }}
-      <a href="{{ $href }}">{{ . }}</a>
+      {{ with .Params.tags }}
+        Tags:
+        {{ range . }}
+        {{ $href := print (absURL "tags/") (urlize .) }}
+          <a href="{{ $href }}">{{ . }}</a>
+        {{ end }}
+      {{ end }}
+      <br />
+
+      {{ with .Params.comments_url }}
+        If you have any questions or remarks, you can leave a comment <a href="{{ $.Params.comments_url }}">here</a>.
       {{ end }}
     </p>
-    {{ end }}
-
-    {{ with .Params.comments_url }}
-    <p>If you have any questions or remarks, you can leave a comment <a href="{{ $.Params.comments_url }}">here</a>.</p>
-    {{ end }}
     <hr/>
   </header>
 

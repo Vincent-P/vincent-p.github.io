@@ -1,350 +1,418 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Universal
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+* {
+	font-size: 18px;
+	font-family: ubuntu, lato, sans-serif;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* Apply styling to all elements (including their `::before` and `::after`
+pseudo-elements). One common use of this selector is to apply a custom
+`box-sizing`. */
+*, *::before, *::after {}
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Root
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 :root {
-    --main-bg-color: #f9f9f9;
-    --highlight-bg-color: #f0f0f0;
-    --main-fg-color: #161616;
-    --constant-fg-color: #A276CA;
-    --type-fg-color: #515C8B;
-}
-@media (prefers-color-scheme: dark) {
-    :root {
-        --main-bg-color: #161616;
-        --highlight-bg-color: #252525;
-        --main-fg-color: #f9f9f9;
-        --constant-fg-color: #CF96FF;
-        --type-fg-color: #97AAFF;
-    }
+  --primary-gradient: linear-gradient(90deg, #e76792 0%, #e8c2df 100%);
+  --secondary-gradient: linear-gradient(90deg, #B2F2E0 0%, #b2f2e0 100%);
+  --sidebar-bg-color: #f1f1f1;
+  --code-bg-color: #e8f5ed;
 }
 
-
-/* Spacings */
-ul {
-    margin: 0;
-    padding: 0;
-}
-
-header p {
-    margin: 0;
-}
-
-body > header {
-    padding: 0.25rem 1rem;
-}
-
-body > footer {
-    padding: 0.25rem 1rem;
-}
-
-main > aside {
-    padding: 0 1rem;
-}
-
-main > article {
-    padding: 0 1rem;
-}
-
-/* if there is no sidebar, space out a bit more*/
-article:only-child {
-    padding: 0 2rem;
-}
-
-aside h2 {
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-}
-
-
-
-/* Dark/Light colors */
+:root {}
+html {}
 body {
-    color: var(--main-fg-color);
-    background-color: var(--main-bg-color);
+	display: flex;
 }
 
-/* Typography */
-html {
-    font-size: 18px;
-    line-height: 1.2;
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Content sectioning
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+main h1:first-of-type,
+main h2:first-of-type {
+	margin-top: 0;
 }
 
-@media only screen and (min-width: 768px) {
-    html {
-        font-size: 20px;
-    }
+h1, h2, h3, h4, h5, h6 {
+	font-size: 1em;
+	margin-bottom: 1ex;
 }
-
-body {
-    font-family: Cambria, Georgia, serif;
-}
-
-h1,h2,h3,h4 {
-    font-family: Calibri, Tahoma, Geneva, Helvetica Neue, Helvetica, Arial, sans-serif;
-    margin: 1.2rem 0;
-}
-
-h4 {
-    font-size: 1rem;
-    line-height: 1.2rem; /* line-height(1.2) * 1.2 */
-}
-
-h3 {
-    font-size: 1.2rem;
-    line-height: 1.44rem; /* line-height(1.2) * 1.2 */
-}
-
-h2 {
-    font-size: 1.4rem;
-    line-height: 1.68rem; /* line-height(1.2) * 1.2 */
-}
-
 h1 {
-    font-size: 1.6rem;
-    line-height: 1.92rem; /* line-height(1.2) * 1.2 */
+	font-size: 1.8em;
+
+	background: var(--primary-gradient);
+  	display: inline-block;
+	padding: .25ex 1em .25ex 1em;
 }
+h2 {
+	font-size: 1.25em;
+	font-weight: normal;
 
-p {
-    margin: 1.2rem 0;
-    font-size: 1rem;
-    line-height: 1.2rem;
+	background: var(--secondary-gradient);
+	display: inline-block;
+
+	padding: 0 .5em 0 .5em;
+	margin-top: 2ex;
 }
-
-code, pre {
-    font-family: Jetbrains Mono, Fira Code, Consolas, Hack, monospace;
-    font-size: 0.75rem;
+h3 {
+	font-size: 1.1em;
 }
-
-
-
-/* Code blocks */
-pre.chroma {
-    padding: 1rem;
-    overflow: auto;
-}
-
-/* inline code */
-:not(pre) > code {
-    color: var(--constant-fg-color);
-    background-color: var(--highlight-bg-color);
-    border: 2px solid var(--highlight-bg-color);
-}
-
-
-/* Lists */
-header ul {
-    list-style: none;
-    padding-left: 0px;
-}
-
-/* https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type#accessibility_concerns */
-header ul li::before {
-    content: "\200B";
-}
-
-header ul li {
-    display: inline;
-}
-
-ul {
-    list-style-type: "• ";
-}
-
-aside ol {
-    list-style: none;
-}
-
-/* https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type#accessibility_concerns */
-aside ol li::before {
-    content: "\200B";
-}
-
-aside nav ol {
-    padding-left: 1rem;
-}
-
-aside nav > ol {
-    padding: 0;
-}
-
-
-/* Links */
-a {
-    color: #0069a8;
-    transition: color .2s;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* block quotes */
-blockquote {
-    border-left: 0.25rem solid var(--main-fg-color);
-    padding-left: 0.5rem;
-}
-
-
-/* SVG text and outlines */
-svg {
-    /* not too big */
-    max-width: 66%;
-    max-height: 50%;
-    width: auto;
-    height: auto;
-
-    /* centered */
-    display: block;
-    margin: auto;
-}
-
-/* nested svgs add 1,2,etc to ids */
-#everything-black *, #everything-black1 *, #everything-black2 * {
-    color: var(--main-fg-color) !important;
-    stroke: var(--main-fg-color) !important;
-    fill: var(--main-fg-color) !important;
-}
-
-.figure-caption {
-    text-align: center;
-}
-
-
-
-/* Blog layout */
-html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-}
-
-body {
-    display: grid;
-    grid-template-columns: auto 1fr 1fr;
-    grid-template-rows: auto 1fr auto;
-    grid-template-areas: " header header  header"
-                         "sidebar   main    main"
-                         " footer footer  footer";
-}
-
-@media only screen and (max-width: 1280px) {
-    html, body {
-        width: auto;
-        height: auto;
-    }
-
-    body {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto 1fr auto;
-        grid-template-areas: " header"
-                             "sidebar"
-                             "   main"
-                             " footer";
-    }
-}
+h4 {}
+h5 {}
+h6 {}
 
 body > header {
-    grid-area: header;
+	background-color: var(--sidebar-bg-color);
+	text-align: right;
+	padding: 1em;
+	min-height: 100vh;
+	box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.075);
 }
 
-body > footer {
-    grid-area: footer;
+header nav {}
+
+nav {}
+nav ul, nav ol {}
+nav li {}
+nav a {
+	word-break: keep-all;
 }
+nav a:visited {}
+nav a:hover {}
+nav a:active {}
 
 main {
-    /* needed to use grid-area on indirect children of body */
-    display: contents;
+	padding: 0.5em 2em;
 }
 
-main > aside {
-    grid-area: sidebar;
+article {
 }
 
-main > article {
-    grid-area: main;
-    overflow-y: auto;
+section {}
+
+aside {}
+
+search {}
+
+footer {
+	display: none;
+}
+
+address {}
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Text block content
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* Overall styling, e.g. vertical spacing */
+p, ol, ul, pre, blockquote, figure, hr, dl {
+	max-width: 50em;
+	margin-bottom: 2ex; 
+}
+
+p {}
+
+ol, ul {}
+ol {}
+ul {}
+li {
+	list-style-type: none;
+}
+ol ol, ol ul, ul ul, ul ol {
+	margin-bottom: auto;
+}
+li li {
+	padding-left: 1em;}
+
+.highlight {}
+pre {
+	font-size: 0.69em;
+	max-width: 69vw;
+  padding: 1ex;
+  margin: 0;
+  margin-bottom: 1em;
+  overflow: auto;
+
+  border: solid 1px dimgrey;
+  border-radius: 0.16em;
+}
+
+pre,
+code,
+code span {
+	font-family: "ubuntu mono", monospace;
+}
+
+pre samp {}
+
+blockquote {}
+
+figure {}
+figcaption {}
+
+hr {}
+
+dl { 
+	margin: 1em 0;
+}
+dt { 
+	font-weight: bold;
+	margin-bottom: .5ex;
+}
+dd {
+	max-width: 50em;
+	padding-left: 2em;
+	margin-bottom: 1em;
 }
 
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Inline text semantics
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-/* Syntax highlighting */
-/* Background */ .chroma {  }
-/* Other */ .chroma .x {  }
-/* Error */ .chroma .err {  }
-/* LineTableTD */ .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
-/* LineTable */ .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; width: auto; overflow: auto; display: block; }
-/* LineHighlight */ .chroma .hl { display: block; width: 100%; }
-/* LineNumbersTable */ .chroma .lnt { margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
-/* LineNumbers */ .chroma .ln { margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
-/* Keyword */ .chroma .k { font-weight: bold; color: var(--type-fg-color)  }
-/* KeywordConstant */ .chroma .kc { font-weight: bold; color: var(--type-fg-color) }
-/* KeywordDeclaration */ .chroma .kd { font-weight: bold; color: var(--type-fg-color) }
-/* KeywordNamespace */ .chroma .kn { font-weight: bold; color: var(--type-fg-color) }
-/* KeywordPseudo */ .chroma .kp { color: var(--type-fg-color) }
-/* KeywordReserved */ .chroma .kr { font-weight: bold; color: var(--type-fg-color) }
-/* KeywordType */ .chroma .kt { color: var(--type-fg-color) }
-/* Name */ .chroma .n {  }
-/* NameAttribute */ .chroma .na {  }
-/* NameBuiltin */ .chroma .nb {  }
-/* NameBuiltinPseudo */ .chroma .bp {  }
-/* NameClass */ .chroma .nc { font-weight: bold }
-/* NameConstant */ .chroma .no {  }
-/* NameDecorator */ .chroma .nd {  }
-/* NameEntity */ .chroma .ni { font-weight: bold }
-/* NameException */ .chroma .ne { font-weight: bold }
-/* NameFunction */ .chroma .nf {  }
-/* NameFunctionMagic */ .chroma .fm {  }
-/* NameLabel */ .chroma .nl {  }
-/* NameNamespace */ .chroma .nn { font-weight: bold }
-/* NameOther */ .chroma .nx {  }
-/* NameProperty */ .chroma .py {  }
-/* NameTag */ .chroma .nt { font-weight: bold }
-/* NameVariable */ .chroma .nv {  }
-/* NameVariableClass */ .chroma .vc {  }
-/* NameVariableGlobal */ .chroma .vg {  }
-/* NameVariableInstance */ .chroma .vi {  }
-/* NameVariableMagic */ .chroma .vm {  }
-/* Literal */ .chroma .l { color: var(--constant-fg-color) }
-/* LiteralDate */ .chroma .ld {  }
-/* LiteralString */ .chroma .s { font-style: italic }
-/* LiteralStringAffix */ .chroma .sa { font-style: italic }
-/* LiteralStringBacktick */ .chroma .sb { font-style: italic }
-/* LiteralStringChar */ .chroma .sc { font-style: italic }
-/* LiteralStringDelimiter */ .chroma .dl { font-style: italic }
-/* LiteralStringDoc */ .chroma .sd { font-style: italic }
-/* LiteralStringDouble */ .chroma .s2 { font-style: italic }
-/* LiteralStringEscape */ .chroma .se { font-weight: bold; font-style: italic }
-/* LiteralStringHeredoc */ .chroma .sh { font-style: italic }
-/* LiteralStringInterpol */ .chroma .si { font-weight: bold; font-style: italic }
-/* LiteralStringOther */ .chroma .sx { font-style: italic }
-/* LiteralStringRegex */ .chroma .sr { font-style: italic }
-/* LiteralStringSingle */ .chroma .s1 { font-style: italic }
-/* LiteralStringSymbol */ .chroma .ss { font-style: italic }
-/* LiteralNumber */ .chroma .m {  color: var(--constant-fg-color)  }
-/* LiteralNumberBin */ .chroma .mb {  color: var(--constant-fg-color)  }
-/* LiteralNumberFloat */ .chroma .mf {  color: var(--constant-fg-color)  }
-/* LiteralNumberHex */ .chroma .mh {  color: var(--constant-fg-color)  }
-/* LiteralNumberInteger */ .chroma .mi {  color: var(--constant-fg-color)  }
-/* LiteralNumberIntegerLong */ .chroma .il {  color: var(--constant-fg-color)  }
-/* LiteralNumberOct */ .chroma .mo {  color: var(--constant-fg-color)  }
-/* Operator */ .chroma .o {  }
-/* OperatorWord */ .chroma .ow { font-weight: bold }
-/* Punctuation */ .chroma .p {  }
-/* Comment */ .chroma .c { font-style: italic }
-/* CommentHashbang */ .chroma .ch { font-style: italic }
-/* CommentMultiline */ .chroma .cm { font-style: italic }
-/* CommentSingle */ .chroma .c1 { font-style: italic }
-/* CommentSpecial */ .chroma .cs { font-style: italic }
-/* CommentPreproc */ .chroma .cp {  }
-/* CommentPreprocFile */ .chroma .cpf {  }
-/* Generic */ .chroma .g {  }
-/* GenericDeleted */ .chroma .gd {  }
-/* GenericEmph */ .chroma .ge { font-style: italic }
-/* GenericError */ .chroma .gr {  }
-/* GenericHeading */ .chroma .gh { font-weight: bold }
-/* GenericInserted */ .chroma .gi {  }
-/* GenericOutput */ .chroma .go {  }
-/* GenericPrompt */ .chroma .gp { font-weight: bold }
-/* GenericStrong */ .chroma .gs { font-weight: bold }
-/* GenericSubheading */ .chroma .gu { font-weight: bold }
-/* GenericTraceback */ .chroma .gt {  }
-/* GenericUnderline */ .chroma .gl {  }
-/* TextWhitespace */ .chroma .w {  }
+a {
+	color: #C02C78;
+	word-break: break-word;
+}
+a:visited {
+	color: #A317D5;
+}
+a:hover {
+}
+a:active {
+}
+
+strong {}
+b {}
+
+em {}
+i {}
+
+q {}
+cite {}
+
+s {}
+
+mark {}
+
+/* If you specify a font size, consider using the `em` unit so that it works
+universally, e.g. for both `h1 small` and `p small` */
+small {}
+sub {}
+sup {}
+
+code {
+	background-color: var(--code-bg-color);
+	word-break: break-word;
+}
+
+dfn {}
+abbr {}
+abbr[title] {}
+
+var {}
+kbd {}
+kbd kbd {}
+samp {}
+
+u {}
+
+data {}
+time {}
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Demarcating edits
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+del {}
+ins {}
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Embedded content
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+img {}
+svg {}
+video {}
+canvas {}
+audio {}
+object {}
+
+noscript {}
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Table content
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+table {}
+caption {}
+col:first-child {}
+thead {}
+tbody {}
+tfoot {}
+tr {}
+th {}
+td {}
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Forms
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+fieldset {}
+fieldset:disabled {}
+legend {}
+
+form {}
+
+label {}
+
+::placeholder {}
+:focus::placeholder {}
+
+/* Overall styling, e.g. vertical spacing */
+input, textarea, select, button {}
+
+/* `textarea` and `input` elements that share a similar look and similar styling
+capabilities */
+/* - common styling */
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="search"],
+input[type="url"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="time"] {}
+/* - individual styling */
+textarea {}
+input[type="text"] {}
+input[type="password"] {}
+input[type="email"] {}
+input[type="tel"] {}
+input[type="number"] {}
+input[type="search"] {}
+input[type="url"] {}
+input[type="date"] {}
+input[type="datetime-local"] {}
+input[type="month"] {}
+input[type="week"] {}
+input[type="time"] {}
+/* Tick boxes */
+input[type="checkbox"], input[type="radio"] {}
+input[type="checkbox"]:checked, input[type="radio"]:checked {}
+input[type="checkbox"] {}
+input[type="checkbox"]:checked {}
+input[type="radio"] {}
+input[type="radio"]:checked {}
+/* Other input fields, some with limited styling capabilities */
+input[type="file"] {}
+input[type="color"] {}
+input[type="range"] {}
+
+select {}
+optgroup {}
+option {}
+option:checked {}
+datalist {}
+
+button,
+input[type="submit"] {}
+button:disabled,
+input[type="submit"]:disabled {}
+button.secondary {}
+button.secondary:disabled {}
+
+/* This matches forms or form elements that are invalid *and* have been
+interacted with. Note that:
+1) You may need to add the `interacted` class to forms yourself
+2) You may need to add the `touched` class to form fields yourself
+3) `:user-invalid` is a working draft and not yet supported by most browsers
+4) `:-moz-ui-invalid` is non-standard and only works in Firefox
+Form validation error messages will appear (in capable browsers) regardless of
+this styling. You can omit 1) and 2) and still have working forms. Perfect
+example of progressive enhancement. */
+/* Applies to invalid forms */
+form.interacted:invalid {}
+/* Applies to invalid form fields. You would need to repeat your declarations
+for the following three groups of selectors individually. Browsers completely
+ignore any rule that contains a selector they do not know. */
+form.interacted :invalid, form .touched:invalid {}
+:user-invalid {}
+:-moz-ui-invalid {}
+
+output {}
+
+progress {}
+meter {}
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Interactive elements
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+details {}
+details[open] {}
+summary {}
+details[open] summary {}
+
+dialog {}
+dialog::backdrop {}
+
+/* Some form fields, `details`, elements with `tabindex`, and possibly other
+elements can be focussed. You should use `:focus-visible` instead of `:focus`
+whenever possible. As the former is not yet widely supported, you need to do it
+as follows:
+1) Set styling on focus
+2) If browser supports `:focus-visible`, revert/unset the styling from 1)
+3) If the element matches `:focus-visible`, apply the styling again */
+:focus {}
+:focus:not(:focus-visible) {}
+:focus-visible {}
+
+[inert], [inert] * {}
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Media queries
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+@media (prefers-reduced-motion: reduce) {
+}
+
+@media (prefers-color-scheme: dark) {
+}
+
+@media (orientation: portrait) {
+}
+
+@media (orientation: landscape) {
+}
+
+@media print {
+}
+
+
+/*
+This file evolved from Natural Selection:
+https://github.com/frontaid/natural-selection
+*/

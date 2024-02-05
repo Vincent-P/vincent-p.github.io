@@ -286,7 +286,6 @@ set_info.descriptorSetCount          = 1;
 VK_CHECK(vkAllocateDescriptorSets(device, &set_info, &descriptor_set));
 ```
 
-
 #### Binding resources on creation {#binding-resources-on-creation}
 
 To have the same convenience as the OpenGL bindless setup, it is very important to bind resources automatically to our bindless descriptor sets and have a way to get a handle back.

@@ -10,12 +10,14 @@
   <!-- Ranges through content/posts/*.md -->
   <ul>
       {{ range (where .Pages "Draft" false) }}
-      <li>
-        <a href="{{.Permalink}}">{{.Title}}</a>
-      </li>
+        {{ $publishDate := .PublishDate.Format "2006-01-02" }}
+        <li>
+          <time datetime="{{ $publishDate }}">{{ $publishDate }}</time>
+          -
+          <a href="{{.Permalink}}">{{.Title}}</a>
+        </li>
       {{ end }}
   </ul>
 </article>
-
 
 {{ end }}

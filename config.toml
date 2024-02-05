@@ -12,19 +12,6 @@ publishDir = "docs"
     ordered = true
     startLevel = 2
     endLevel = 5
-  [markup.goldmark]
-    # ox-hugo
-    [markup.goldmark.renderer]
-      hardWraps = false
-      unsafe = true
   [markup.highlight]
-    anchorLineNos = true
-    codeFences = true
-    guessSyntax = false
-    hl_Lines = ''
-    lineAnchors = ''
-    lineNoStart = 1
-    lineNos = true
-    lineNumbersInTable = true
-    noClasses = false
-    tabWidth = 4
+    style = 'emacs'
+

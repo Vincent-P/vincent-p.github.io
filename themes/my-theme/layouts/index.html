@@ -11,14 +11,19 @@
     {{ $published_posts := where $posts "Draft" false }}
 
     {{ range $published_posts }}
-        <p><a href="{{ .Permalink }}">{{ .Title }}</a></p>
+      {{ $publishDate := .PublishDate.Format "2006-01-02" }}
+      <p>
+        <time datetime="{{ $publishDate }}">{{ $publishDate }}</time>
+        -
+        <a href="{{ .Permalink }}">{{ .Title }}</a>
+      </p>
     {{end}}
   </section>
 
   <section>
     <h2>Tags:</h2>
     {{ range $taxonomyname, $taxonomy := .Site.Taxonomies.tags }}
-    <a href="{{ "/tags/" | relLangURL }}{{ $taxonomyname | urlize }}">{{ $taxonomyname }}</a>
+      <a href="{{ "/tags/" | relLangURL }}{{ $taxonomyname | urlize }}">{{ $taxonomyname }}</a>
     {{ end }}
   </section>
 
