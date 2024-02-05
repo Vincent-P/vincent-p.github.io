@@ -1,6 +1,6 @@
 title = "VP"
 author = "Vincent Parizet"
-baseURL = "https://vincent-p.github.io/"
+baseURL = "https://www.vincentparizet.com/blog/"
 languageCode = "en-us"
 theme = "my-theme"
 
@@ -14,4 +14,5 @@ publishDir = "docs"
     endLevel = 5
   [markup.highlight]
     style = 'emacs'
+    noClasses=false
 

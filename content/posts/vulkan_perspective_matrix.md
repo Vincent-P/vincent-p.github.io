@@ -14,7 +14,9 @@ In most of the computer graphics/opengl/vulkan tutorials online there is only a 
 In these notes I will try to explain the maths behind the perspective projection and give a matrix that works with Vulkan.
 Don't worry you can still follow if you don't use Vulkan and adapt the formulas with **your** settings.
 
-![Figure 1: The frustum and the clip volume](/persp_matrix_frustum1.svg)
+{{< figure rel="persp_matrix_frustum1.svg" >}}
+
+![Figure 1: The frustum and the clip volume](/blog/persp_matrix_frustum1.svg)
 
 The projection matrix is a transformation of the camera (or eye) space into clip space.
 The clip space is a homogeneous space that is used to remove (or clip) primitives outside the viewport.
@@ -30,14 +32,14 @@ The first step consists of projecting points in eye space on the near plane of t
 Here is the eye space is a right-handed coordinate system and the camera is facing towards the -Z axis.
 Let's start by finding the values of \\(x\\) and \\(y\\), the depth will be derived later.
 
-![Figure 2: The frustum volume, the point (xe, ye, ze) gets projected in the near plane at coordinates (xp, yp, zp). The blue line is the Z axis.](/persp_matrix_frustum2.svg)
+![Figure 2: The frustum volume, the point (xe, ye, ze) gets projected in the near plane at coordinates (xp, yp, zp). The blue line is the Z axis.](/blog/persp_matrix_frustum2.svg)
 
 The frustum is a pyramid with the camera as its apex: it forms similar triangles on the XZ and YZ planes.
 
 Using the Intercept theorem (also known as Thales's theorem) it's easy to find the value of \\(x\_p\\) and \\(y\_p\\).
 
 
-![Figure 3: Side view (YZ plane) of the frustum, the top view (XZ plane) is similar](/persp_matrix_frustum3.svg)
+![Figure 3: Side view (YZ plane) of the frustum, the top view (XZ plane) is similar](/blog/persp_matrix_frustum3.svg)
 
 The intercept theorem tells us that the ratio between a point projected on the near plane and the coordinate in eye space is the same: \\[ \frac{x\_p}{x\_e} = \frac{y\_p}{y\_e} = \frac{z\_p}{z\_e} = \frac{-n}{z\_e} \\]
 
@@ -113,7 +115,7 @@ If you use a legacy OpenGL clip space, your clip space corners will be different
 
 ---
 
-![Figure 4: The mapping of the corners of the frustum to the corners of the clip volume](/persp_matrix_frustum4.svg)
+![Figure 4: The mapping of the corners of the frustum to the corners of the clip volume](/blog/persp_matrix_frustum4.svg)
 
 <div class="figure-caption">
   
@@ -335,7 +337,7 @@ It's also easier to reason on the field of view and aspect ratios rather than on
 
 
 
-![Figure 5: Diagram of the **vertical** field of view](/persp_matrix_frustum5.svg)
+![Figure 5: Diagram of the **vertical** field of view](/blog/persp_matrix_frustum5.svg)
 
 Let's try to express \\(\frac{2n}{width}\\) and \\(-\frac{2n}{height}\\) in terms of field of view and aspect ratio:
 
